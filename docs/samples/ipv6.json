@@ -1,0 +1,35 @@
+{
+  "ipv6Enable": {
+    "ipv6En": "0"
+  },
+  "wan6BasicCfg": {
+    "ipv6WanType": "2",
+    "ipv6WanPPPoEUser": "<redacted>",
+    "ipv6WanPPPoEPwd": "<redacted>",
+    "ipv6PPPoeDelegation": "1",
+    "ipv6PPPoeTemporary": "1"
+  },
+  "lan6Cfg": {
+    "ipv6LanType": "0",
+    "ipv6LanIP": "",
+    "ipv6LanIPLen": "",
+    "ipv6LanDhcpPrefixType": "",
+    "ipv6LanDhcpPrefix": "",
+    "ipv6LanDhcpPrefixLen": "",
+    "ipv6LanDhcpEn": "1",
+    "ipv6LanDhcpType": "1",
+    "ipv6LanDhcpStartID": "",
+    "ipv6LanDhcpEndID": "",
+    "ipv6LanDnsType": "",
+    "ipv6LanDns1": "",
+    "ipv6LanDns2": ""
+  },
+  "ipv6Status": {
+    "conType": "PPPoEv6",
+    "wanAddr": "fe80:000c::829f:e4ff:fe48:edc0/64\n",
+    "lanAddr": "fe80:0001::829f:e4ff:fe48:edc0/64\n",
+    "gateway": "",
+    "preDNS": "",
+    "altDNS": ""
+  }
+}

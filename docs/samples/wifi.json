@@ -1,0 +1,40 @@
+{
+  "wifiEn": {
+    "wifiEn": "true"
+  },
+  "wifiBasicCfg": {
+    "wifiHideSSID": "false",
+    "wifiSSID": "ExampleNetwork",
+    "wifiSecurityMode": "wpa&wpa2",
+    "wifiPwd": "<redacted>",
+    "wifiNoPwd": "false"
+  },
+  "wifiAdvCfg": {
+    "wifiMode": "bgn",
+    "wifiMaxChannel": "13",
+    "wifiChannel": "auto",
+    "wifiChannelCurrent": "5",
+    "wifiBandwidth": "auto",
+    "wifiBandwidthCurrent": "40",
+    "wifiRelayType": "disabled"
+  },
+  "wifiPower": {
+    "wifiPower": "high",
+    "wifiPowerGear": "hide_normal"
+  },
+  "wifiTime": {
+    "wifiTimeEn": "false",
+    "wifiRelayType": "disabled",
+    "wifiTimeClose": "00:00-07:00",
+    "wifiTimeDate": "01111100"
+  },
+  "wifiWPS": {
+    "wpsEn": "false",
+    "wpsPIN": "<redacted>"
+  },
+  "wifiVirSsid": {
+    "multiWifiEnable": "0",
+    "multiWifiSSID": "Example-Guest",
+    "multiWifiPwd": "<redacted>"
+  }
+}

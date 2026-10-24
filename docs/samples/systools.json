@@ -1,0 +1,71 @@
+{
+  "loginAuth": {
+    "hasLoginPwd": "true",
+    "username ": "admin"
+  },
+  "wanAdvCfg": {
+    "wanServerName": "",
+    "wanServiceName": "",
+    "wanType": "pppoe",
+    "wanMTU": "1480",
+    "wanMTUCurrent": "1480",
+    "wanSpeed": "Auto",
+    "wanSpeedCurrent": "100",
+    "macClone": "default",
+    "macRouter": "02:00:00:00:00:10",
+    "macWifiDevice": "true",
+    "macHost": "02:00:00:00:00:11",
+    "macCurrentWan": "02:00:00:00:00:10"
+  },
+  "lanCfg": {
+    "lanIP": "192.168.0.1",
+    "lanMask": "255.255.255.0",
+    "dhcpEn": "true",
+    "lanDhcpStartIP": "192.168.0.100",
+    "lanDhcpEndIP": "192.168.0.200",
+    "lanDns1": "45.90.28.155",
+    "lanDns2": "45.90.30.155"
+  },
+  "softWare": {
+    "softVersion": "V12.03.01.27_multi",
+    "autoMaintenanceEn": "true"
+  },
+  "wifiRelay": {
+    "wifiRelayType": "disabled",
+    "wifiRelaySSID": "",
+    "wifiRelayChannel": "0",
+    "wifiRelaySecurityMode": "none",
+    "wifiRelayPwd": "<redacted>",
+    "wifiRelayMAC": "",
+    "wifiRelayConnectStatus": 1,
+    "connectDuration": "0"
+  },
+  "sysTime": {
+    "sysTimeZone": "51",
+    "sysTimecurrentTime": "2026-10-24 22:23:15",
+    "sysTimeSntpType": "manual",
+    "internetState": "true"
+  },
+  "remoteWeb": {
+    "remoteWebEn": "false",
+    "remoteWebType": "any",
+    "remoteWebIP": "",
+    "remoteWebPort": "80"
+  },
+  "isWifiClients": {
+    "isWifiClients": "true"
+  },
+  "systemInfo": {
+    "wanConnectTime": "20712",
+    "wanType": "pppoe",
+    "statusWanMAC": "02:00:00:00:00:10",
+    "macHost": "02:00:00:00:00:11",
+    "lanIP": "192.168.0.1",
+    "statusWanMask": "255.255.255.254",
+    "statusWanIP": "203.0.113.10",
+    "statusWanGaterway": "10.101.8.1",
+    "statusWanDns1": "14.1.103.203",
+    "statusWanDns2": "8.8.8.8",
+    "softVersion": "V12.03.01.27_multi"
+  }
+}

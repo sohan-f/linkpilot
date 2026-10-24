@@ -1,0 +1,164 @@
+{
+  "wifiRelay": {
+    "wifiRelayType": "disabled",
+    "wifiRelaySSID": "",
+    "wifiRelayChannel": "0",
+    "wifiRelaySecurityMode": "none",
+    "wifiRelayPwd": "<redacted>",
+    "wifiRelayMAC": "",
+    "wifiRelayConnectStatus": 1,
+    "connectDuration": "0"
+  },
+  "staticIPList": [],
+  "portList": [],
+  "macFilter": {
+    "curFilterMode": "deny",
+    "macFilterList": [
+      {
+        "hostname": "dev-null",
+        "remark": "",
+        "mac": "02:00:00:00:00:03",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "",
+        "remark": "Device A",
+        "mac": "02:00:00:00:00:01",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Unknown",
+        "remark": "Device C",
+        "mac": "02:00:00:00:00:02",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Unknown",
+        "remark": "Device D",
+        "mac": "02:00:00:00:00:04",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "",
+        "remark": "Device B",
+        "mac": "02:00:00:00:00:02",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Unknown",
+        "remark": "Device E",
+        "mac": "02:00:00:00:00:05",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Unknown",
+        "remark": "A",
+        "mac": "02:00:00:00:00:06",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Example-Device",
+        "remark": "Device F",
+        "mac": "02:00:00:00:00:07",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Unknown",
+        "remark": "Device G",
+        "mac": "02:00:00:00:00:08",
+        "filterMode": "pass"
+      },
+      {
+        "hostname": "Unknown",
+        "remark": "",
+        "mac": "02:00:00:00:00:09",
+        "filterMode": "pass"
+      }
+    ]
+  },
+  "localhost": {
+    "localhostMAC": "02:00:00:00:00:11",
+    "localhost": "192.168.0.103",
+    "lanMask": "255.255.255.0"
+  },
+  "onlineList": [
+    {
+      "qosListHostname": "Unknown",
+      "qosListRemark": "Device A",
+      "qosListIP": "192.168.0.101",
+      "qosListConnectType": "wifi",
+      "qosListMac": "02:00:00:00:00:01",
+      "qosListDownSpeed": "0.00",
+      "qosListUpSpeed": "0.00",
+      "qosListDownLimit": "4931584.00",
+      "qosListUpLimit": "4931584.00",
+      "qosListAccess": "true"
+    },
+    {
+      "qosListHostname": "Unknown",
+      "qosListRemark": "Device B",
+      "qosListIP": "192.168.0.108",
+      "qosListConnectType": "wifi",
+      "qosListMac": "02:00:00:00:00:02",
+      "qosListDownSpeed": "0.00",
+      "qosListUpSpeed": "0.00",
+      "qosListDownLimit": "4931584.00",
+      "qosListUpLimit": "4931584.00",
+      "qosListAccess": "true"
+    },
+    {
+      "qosListHostname": "dev-null",
+      "qosListRemark": "",
+      "qosListIP": "192.168.0.103",
+      "qosListConnectType": "wifi",
+      "qosListMac": "02:00:00:00:00:03",
+      "qosListDownSpeed": "4595.00",
+      "qosListUpSpeed": "81.00",
+      "qosListDownLimit": "4931584.00",
+      "qosListUpLimit": "4931584.00",
+      "qosListAccess": "true"
+    },
+    {
+      "qosListHostname": "Example-Device",
+      "qosListRemark": "Device F",
+      "qosListIP": "192.168.0.107",
+      "qosListConnectType": "wifi",
+      "qosListMac": "02:00:00:00:00:07",
+      "qosListDownSpeed": "0.00",
+      "qosListUpSpeed": "0.00",
+      "qosListDownLimit": "4931584.00",
+      "qosListUpLimit": "4931584.00",
+      "qosListAccess": "true"
+    }
+  ],
+  "ddns": {
+    "ddnsEn": "false",
+    "ddnsServiceName": "oray.com",
+    "ddnsUser": "",
+    "ddnsPwd": "<redacted>",
+    "ddnsServer": "",
+    "ddnsStatus": ""
+  },
+  "dmz": {
+    "dmzEn": "false",
+    "dmzHostIP": ""
+  },
+  "ping": {
+    "pingEn": "true"
+  },
+  "upnp": {
+    "upnpEn": "true"
+  },
+  "lanCfg": {
+    "lanIP": "192.168.0.1",
+    "lanMask": "255.255.255.0",
+    "dhcpEn": "true",
+    "lanDhcpStartIP": "192.168.0.100",
+    "lanDhcpEndIP": "192.168.0.200",
+    "lanDns1": "45.90.28.155",
+    "lanDns2": "45.90.30.155"
+  },
+  "apIsolation": {
+    "apIsolationEn": "false"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "lanCfg": {
+    "lanIP": "192.168.0.1",
+    "lanMask": "255.255.255.0",
+    "dhcpEn": "true",
+    "lanDhcpStartIP": "192.168.0.100",
+    "lanDhcpEndIP": "192.168.0.200",
+    "lanDns1": "45.90.28.155",
+    "lanDns2": "45.90.30.155"
+  },
+  "wanBasicCfg": {
+    "wanType": "pppoe",
+    "wanPPPoEUser": "<redacted>",
+    "wanPPPoEPwd": "<redacted>",
+    "wanIP": "203.0.113.10",
+    "wanMask": "255.255.255.254",
+    "wanGateway": "10.101.8.1",
+    "wanDns1": "14.1.103.203",
+    "wanDns2": "8.8.8.8"
+  },
+  "wanAdvCfg": {
+    "wanServerName": "",
+    "wanServiceName": "",
+    "wanType": "pppoe",
+    "wanMTU": "1480",
+    "wanMTUCurrent": "1480",
+    "wanSpeed": "Auto",
+    "wanSpeedCurrent": "100",
+    "macClone": "default",
+    "macRouter": "02:00:00:00:00:10",
+    "macWifiDevice": "true",
+    "macHost": "02:00:00:00:00:11",
+    "macCurrentWan": "02:00:00:00:00:10"
+  },
+  "internetStatus": {
+    "wanConnectStatus": "13103061",
+    "newLanIP": "255.255.255.255",
+    "lanWanIPConflict": "false"
+  }
+}

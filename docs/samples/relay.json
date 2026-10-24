@@ -1,0 +1,15 @@
+{
+  "wifiEn": {
+    "wifiEn": "true"
+  },
+  "wifiRelay": {
+    "wifiRelayType": "disabled",
+    "wifiRelaySSID": "",
+    "wifiRelayChannel": "0",
+    "wifiRelaySecurityMode": "none",
+    "wifiRelayPwd": "<redacted>",
+    "wifiRelayMAC": "",
+    "wifiRelayConnectStatus": 1,
+    "connectDuration": "0"
+  }
+}

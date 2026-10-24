@@ -1,0 +1,53 @@
+{
+  "internetStatus": {
+    "wanConnectStatus": "13103061",
+    "newLanIP": "255.255.255.255",
+    "lanWanIPConflict": "false"
+  },
+  "deviceStastics": {
+    "statusOnlineNumber": "4",
+    "statusBlackNum": "0",
+    "statusUpSpeed": "0",
+    "statusDownSpeed": "0",
+    "wifiRate": "41",
+    "routerName": "ExampleNetwork",
+    "extendName": ""
+  },
+  "systemInfo": {
+    "wanConnectTime": "20704",
+    "wanType": "pppoe",
+    "statusWanMAC": "02:00:00:00:00:10",
+    "macHost": "02:00:00:00:00:11",
+    "lanIP": "192.168.0.1",
+    "statusWanMask": "255.255.255.254",
+    "statusWanIP": "203.0.113.10",
+    "statusWanGaterway": "10.101.8.1",
+    "statusWanDns1": "14.1.103.203",
+    "statusWanDns2": "8.8.8.8",
+    "softVersion": "V12.03.01.27_multi"
+  },
+  "wanAdvCfg": {
+    "wanServerName": "",
+    "wanServiceName": "",
+    "wanType": "pppoe",
+    "wanMTU": "1480",
+    "wanMTUCurrent": "1480",
+    "wanSpeed": "Auto",
+    "wanSpeedCurrent": "100",
+    "macClone": "default",
+    "macRouter": "02:00:00:00:00:10",
+    "macWifiDevice": "true",
+    "macHost": "02:00:00:00:00:11",
+    "macCurrentWan": "02:00:00:00:00:10"
+  },
+  "wifiRelay": {
+    "wifiRelayType": "disabled",
+    "wifiRelaySSID": "",
+    "wifiRelayChannel": "0",
+    "wifiRelaySecurityMode": "none",
+    "wifiRelayPwd": "<redacted>",
+    "wifiRelayMAC": "",
+    "wifiRelayConnectStatus": 1,
+    "connectDuration": "0"
+  }
+}

@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to build and publish (for example v1.0.0)
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.ref }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install SDK platform
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKMANAGER" ] || SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -print -quit)
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install "platforms;android-37.0" "build-tools;37.0.0"
+
+      - name: Decode release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.LINKPILOT_KEYSTORE_BASE64 }}
+        run: |
+          mkdir -p android/keystore
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/keystore/linkpilot-release.jks
+
+      - name: Build signed release
+        working-directory: android
+        env:
+          LINKPILOT_KEYSTORE: keystore/linkpilot-release.jks
+          LINKPILOT_KEYSTORE_PASSWORD: ${{ secrets.LINKPILOT_KEYSTORE_PASSWORD }}
+          LINKPILOT_KEY_ALIAS: ${{ secrets.LINKPILOT_KEY_ALIAS }}
+          LINKPILOT_KEY_PASSWORD: ${{ secrets.LINKPILOT_KEY_PASSWORD }}
+        run: |
+          ./gradlew :app:assembleRelease :app:bundleRelease \
+            -PversionName="${RELEASE_TAG#v}" \
+            -PversionCode="$GITHUB_RUN_NUMBER" \
+            --console=plain
+
+      - name: Verify signature
+        run: |
+          "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --print-certs \
+            android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Name artifacts
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk "linkpilot-$RELEASE_TAG.apk"
+          cp android/app/build/outputs/bundle/release/app-release.aab "linkpilot-$RELEASE_TAG.aab"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "linkpilot-$RELEASE_TAG.apk" "linkpilot-$RELEASE_TAG.aab" --clobber
+          else
+            gh release create "$RELEASE_TAG" "linkpilot-$RELEASE_TAG.apk" "linkpilot-$RELEASE_TAG.aab" \
+              --title "LinkPilot $RELEASE_TAG" --generate-notes
+          fi

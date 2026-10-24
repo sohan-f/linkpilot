@@ -1,0 +1,42 @@
+{
+  "parentCtrlList": [
+    {
+      "parentCtrlHostname": "Unknown",
+      "parentCtrlRemark": "Device A",
+      "parentCtrlMAC": "02:00:00:00:00:01",
+      "parentCtrlIP": "192.168.0.101",
+      "parentCtrlConnectTime": 1062,
+      "parentCtrlEn": "false"
+    },
+    {
+      "parentCtrlHostname": "Unknown",
+      "parentCtrlRemark": "Device B",
+      "parentCtrlMAC": "02:00:00:00:00:02",
+      "parentCtrlIP": "192.168.0.108",
+      "parentCtrlConnectTime": 3930,
+      "parentCtrlEn": "false"
+    },
+    {
+      "parentCtrlHostname": "dev-null",
+      "parentCtrlRemark": "",
+      "parentCtrlMAC": "02:00:00:00:00:03",
+      "parentCtrlIP": "192.168.0.103",
+      "parentCtrlConnectTime": 5666,
+      "parentCtrlEn": "false"
+    },
+    {
+      "parentCtrlHostname": "Example-Device",
+      "parentCtrlRemark": "Device F",
+      "parentCtrlMAC": "02:00:00:00:00:07",
+      "parentCtrlIP": "192.168.0.107",
+      "parentCtrlConnectTime": 1643,
+      "parentCtrlEn": "false"
+    }
+  ],
+  "parentAccessCtrl": {
+    "parentCtrlOnlineTime": "19:00-21:00",
+    "parentCtrlOnlineDate": "00000110",
+    "parentCtrlURLFilterMode": "disable",
+    "parentCtrlURL": []
+  }
+}
