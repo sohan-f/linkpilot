@@ -19,6 +19,7 @@ permissions:
 env:
   RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
   PUBLISH: ${{ github.event_name != 'workflow_dispatch' || inputs.publish }}
+  HAS_KEYSTORE: ${{ secrets.LINKPILOT_KEYSTORE_BASE64 != '' }}
 
 jobs:
   release:
@@ -46,11 +47,11 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" --install "platforms;android-37.2" "build-tools;37.0.0"
 
-      - name: Require a tag when publishing
-        if: env.PUBLISH == 'true' && env.RELEASE_TAG == ''
+      - name: Require tag and keystore when publishing
+        if: env.PUBLISH == 'true'
         run: |
-          echo "::error::A tag is required to publish a release."
-          exit 1
+          [ -n "$RELEASE_TAG" ] || { echo "::error::A tag is required to publish a release."; exit 1; }
+          [ "$HAS_KEYSTORE" = "true" ] || { echo "::error::Signing secrets are required to publish a release."; exit 1; }
 
       - name: Resolve version
         id: version
@@ -60,33 +61,41 @@ jobs:
           echo "name=${label#v}" >> "$GITHUB_OUTPUT"
 
       - name: Decode release keystore
+        if: env.HAS_KEYSTORE == 'true'
         env:
           KEYSTORE_BASE64: ${{ secrets.LINKPILOT_KEYSTORE_BASE64 }}
         run: |
           mkdir -p android/keystore
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > android/keystore/linkpilot-release.jks
 
-      - name: Build signed release
+      - name: Build release
         working-directory: android
         env:
-          LINKPILOT_KEYSTORE: keystore/linkpilot-release.jks
-          LINKPILOT_KEYSTORE_PASSWORD: ${{ secrets.LINKPILOT_KEYSTORE_PASSWORD }}
-          LINKPILOT_KEY_ALIAS: ${{ secrets.LINKPILOT_KEY_ALIAS }}
-          LINKPILOT_KEY_PASSWORD: ${{ secrets.LINKPILOT_KEY_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.LINKPILOT_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.LINKPILOT_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.LINKPILOT_KEY_PASSWORD }}
         run: |
+          if [ "$HAS_KEYSTORE" = "true" ]; then
+            export LINKPILOT_KEYSTORE=keystore/linkpilot-release.jks
+            export LINKPILOT_KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD"
+            export LINKPILOT_KEY_ALIAS="$KEY_ALIAS"
+            export LINKPILOT_KEY_PASSWORD="$KEY_PASSWORD"
+          fi
           ./gradlew :app:assembleRelease :app:bundleRelease \
             -PversionName="${{ steps.version.outputs.name }}" \
             -PversionCode="$GITHUB_RUN_NUMBER" \
             --console=plain
 
       - name: Verify signature
+        if: env.HAS_KEYSTORE == 'true'
         run: |
           "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --print-certs \
             android/app/build/outputs/apk/release/app-release.apk
 
       - name: Name artifacts
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk "linkpilot-${{ steps.version.outputs.label }}.apk"
+          apk=$(ls android/app/build/outputs/apk/release/*.apk | head -n 1)
+          cp "$apk" "linkpilot-${{ steps.version.outputs.label }}.apk"
           cp android/app/build/outputs/bundle/release/app-release.aab "linkpilot-${{ steps.version.outputs.label }}.aab"
 
       - name: Upload build artifacts

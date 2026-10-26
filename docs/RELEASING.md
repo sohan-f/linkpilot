@@ -32,6 +32,16 @@ The tag starts the workflow, which builds a signed APK and AAB, verifies the APK
 creates a GitHub release named after the tag. `versionName` comes from the tag and `versionCode`
 from the workflow run number. To rebuild an existing tag, run the workflow manually with its tag.
 
+To build and collect the artifacts without publishing, dispatch the workflow with `publish` off:
+
+```bash
+gh workflow run release.yml -f publish=false
+gh run download <run-id> -n linkpilot-run-<run-number>
+```
+
+The artifacts are then attached to the workflow run instead of a release. Publishing requires both a
+tag and the signing secrets; without the secrets the release variant still builds, unsigned.
+
 ## Local signed build
 
 With `android/keystore.properties` present:
