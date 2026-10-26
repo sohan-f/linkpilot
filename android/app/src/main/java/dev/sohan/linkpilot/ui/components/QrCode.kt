@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 
@@ -39,7 +40,7 @@ private fun wifiQr(ssid: String, password: String, security: String, size: Int =
             val y = index / matrix.width
             if (matrix[x, y]) 0xFF000000.toInt() else 0xFFFFFFFF.toInt()
         }
-        Bitmap.createBitmap(matrix.width, matrix.height, Bitmap.Config.ARGB_8888).apply {
+        createBitmap(matrix.width, matrix.height, Bitmap.Config.ARGB_8888).apply {
             setPixels(pixels, 0, matrix.width, 0, 0, matrix.width, matrix.height)
         }
     }.getOrNull()

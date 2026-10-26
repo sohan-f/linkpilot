@@ -4,6 +4,7 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import androidx.core.content.edit
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -22,7 +23,7 @@ class SecureStore(context: Context) {
         val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, key())
         val payload = cipher.iv + cipher.doFinal(password.toByteArray(Charsets.UTF_8))
-        prefs.edit().putString("password", Base64.encodeToString(payload, Base64.NO_WRAP)).apply()
+        prefs.edit { putString("password", Base64.encodeToString(payload, Base64.NO_WRAP)) }
     }
 
     fun load(): String? {
@@ -37,7 +38,7 @@ class SecureStore(context: Context) {
         }.getOrNull()
     }
 
-    fun clear() = prefs.edit().remove("password").apply()
+    fun clear() = prefs.edit { remove("password") }
 
     private fun key(): SecretKey {
         val store = KeyStore.getInstance(PROVIDER).apply { load(null) }

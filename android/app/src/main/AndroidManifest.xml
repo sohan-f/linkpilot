@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
     <!-- The stock firmware only speaks plain HTTP on the LAN; there is no TLS endpoint. -->
+    <!-- allowBackup="false" already disables pre-12 backup, so fullBackupContent would be dead config. -->
     <application
         android:name=".LinkPilotApp"
         android:allowBackup="false"
@@ -18,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinkPilot"
         android:usesCleartextTraffic="true"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute,DataExtractionRules">
 
         <activity
             android:name=".MainActivity"

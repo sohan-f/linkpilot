@@ -242,7 +242,7 @@ private fun MainShell(
     val density = LocalDensity.current
     val navBarBottom = with(density) { WindowInsets.navigationBars.getBottom(this) }
     val barHeight = remember { mutableIntStateOf(0) }
-    val recordBarHeight = remember { { height: Int -> barHeight.value = height } }
+    val recordBarHeight = remember { { height: Int -> barHeight.intValue = height } }
     val sink = back.active?.incoming ?: nav.current
     val sinkHasBar = sink !is Route.Page
 
@@ -431,8 +431,8 @@ private fun MainShell(
     Scaffold(
         // The root Surface already paints the window; a second full-screen fill only adds overdraw.
         containerColor = Color.Transparent,
-        contentWindowInsets = remember(sinkHasBar, barHeight.value, navBarBottom) {
-            WindowInsets(0, 0, 0, if (sinkHasBar) barHeight.value else navBarBottom)
+        contentWindowInsets = remember(sinkHasBar, barHeight.intValue, navBarBottom) {
+            WindowInsets(0, 0, 0, if (sinkHasBar) barHeight.intValue else navBarBottom)
         },
         snackbarHost = { AppSnackbarHost(snackbar) },
     ) { _ ->
