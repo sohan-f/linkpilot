@@ -24,7 +24,7 @@ import androidx.compose.material.icons.rounded.FamilyRestroom
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Lan
-import androidx.compose.material.icons.rounded.ListAlt
+import androidx.compose.material.icons.automirrored.rounded.ListAlt
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Router
 import androidx.compose.material.icons.rounded.Search
@@ -80,7 +80,7 @@ internal data class MoreEntry(
 internal val NETWORK_ENTRIES = listOf(
     MoreEntry(PageId.Wan, "Internet (WAN)", "Connection type, credentials, MAC clone", Icons.Rounded.Public, "pppoe dhcp static mtu speed"),
     MoreEntry(PageId.Lan, "LAN & DHCP", "Router address, pool, DNS", Icons.Rounded.Lan, "ip mask dhcp dns subnet"),
-    MoreEntry(PageId.StaticLease, "DHCP reservations", "Fixed addresses for known devices", Icons.Rounded.ListAlt, "static lease bind"),
+    MoreEntry(PageId.StaticLease, "DHCP reservations", "Fixed addresses for known devices", Icons.AutoMirrored.Rounded.ListAlt, "static lease bind"),
     MoreEntry(PageId.PortForward, "Port forwarding", "Expose services to the WAN", Icons.Rounded.SettingsEthernet, "nat port map"),
     MoreEntry(PageId.MacFilter, "MAC filter", "Whitelist or blacklist clients", Icons.Rounded.Security, "mac deny pass whitelist"),
     MoreEntry(PageId.Firewall, "Firewall & UPnP", "DMZ, DDNS, WAN ping, AP isolation", Icons.Rounded.Shield, "dmz ddns upnp ping isolation"),

@@ -125,7 +125,7 @@ class TendaApi(initialBase: String = DEFAULT_BASE) {
                     .build()
             )
             response.use {
-                val text = it.body?.string().orEmpty()
+                val text = it.body.string()
                 if (it.code == 302) {
                     _authenticated.value = false
                     throw SessionExpiredException()
@@ -142,7 +142,7 @@ class TendaApi(initialBase: String = DEFAULT_BASE) {
         response.use {
             if (it.code == 302) throw SessionExpiredException()
             if (!it.isSuccessful) throw RouterProtocolException("Download failed (${it.code})")
-            it.body?.bytes() ?: ByteArray(0)
+            it.body.bytes()
         }
     }
 
@@ -158,7 +158,7 @@ class TendaApi(initialBase: String = DEFAULT_BASE) {
                 _authenticated.value = false
                 throw SessionExpiredException()
             }
-            val text = it.body?.string().orEmpty().trim()
+            val text = it.body.string().trim()
             if (!text.startsWith("{")) {
                 // An expired session can also come back as the login page instead of a redirect.
                 if (text.contains("<!DOCTYPE", ignoreCase = true) || text.contains("<html", ignoreCase = true)) {
@@ -204,8 +204,8 @@ private class MemoryCookieJar : CookieJar {
     private val cookies = mutableMapOf<String, Cookie>()
 
     @Synchronized
-    override fun saveFromResponse(url: HttpUrl, list: List<Cookie>) {
-        list.forEach { cookies[it.name] = it }
+    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>) {
+        cookies.forEach { this.cookies[it.name] = it }
     }
 
     @Synchronized
