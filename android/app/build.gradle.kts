@@ -75,7 +75,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.13.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
-    implementation("androidx.navigationevent:navigationevent-compose:1.1.2")
+    implementation("androidx.navigationevent:navigationevent-compose:1.2.0")
 
     implementation("androidx.compose.ui:ui:$compose")
     implementation("androidx.compose.foundation:foundation:$compose")
@@ -83,8 +83,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:$compose")
     implementation("androidx.compose.material3:material3:1.5.0-beta02")
 
-    implementation("com.squareup.okhttp3:okhttp:5.5.0")
-    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.squareup.okhttp3:okhttp:5.5.1")
+    implementation("com.google.zxing:core:3.5.4")
 
     debugImplementation("androidx.compose.ui:ui-tooling:$compose")
 

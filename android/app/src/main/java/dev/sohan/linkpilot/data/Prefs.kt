@@ -1,6 +1,7 @@
 package dev.sohan.linkpilot.data
 
 import android.content.Context
+import androidx.core.content.edit
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
@@ -25,24 +26,24 @@ class Prefs(context: Context) {
 
     var baseUrl: String
         get() = sp.getString("base_url", DEFAULT_BASE) ?: DEFAULT_BASE
-        set(value) = sp.edit().putString("base_url", normalizeBase(value)).apply()
+        set(value) = sp.edit { putString("base_url", normalizeBase(value)) }
 
     var themeMode: ThemeMode
         get() = runCatching { ThemeMode.valueOf(sp.getString("theme", "SYSTEM")!!) }
             .getOrDefault(ThemeMode.SYSTEM)
-        set(value) = sp.edit().putString("theme", value.name).apply()
+        set(value) = sp.edit { putString("theme", value.name) }
 
     var dynamicColor: Boolean
         get() = sp.getBoolean("dynamic_color", true)
-        set(value) = sp.edit().putBoolean("dynamic_color", value).apply()
+        set(value) = sp.edit { putBoolean("dynamic_color", value) }
 
     var rememberPassword: Boolean
         get() = sp.getBoolean("remember_password", true)
-        set(value) = sp.edit().putBoolean("remember_password", value).apply()
+        set(value) = sp.edit { putBoolean("remember_password", value) }
 
     var lastSsid: String
         get() = sp.getString("last_ssid", "").orEmpty()
-        set(value) = sp.edit().putString("last_ssid", value).apply()
+        set(value) = sp.edit { putString("last_ssid", value) }
 
     @Synchronized
     fun alias(mac: String): String = aliases().optString(mac.lowercase(), "")
@@ -51,7 +52,7 @@ class Prefs(context: Context) {
     fun setAlias(mac: String, name: String) {
         val json = aliases()
         if (name.isBlank()) json.remove(mac.lowercase()) else json.put(mac.lowercase(), name.trim())
-        sp.edit().putString("aliases", json.toString()).apply()
+        sp.edit { putString("aliases", json.toString()) }
     }
 
     fun aliasMap(): Map<String, String> {
@@ -76,7 +77,7 @@ class Prefs(context: Context) {
         val next = favorites().toMutableSet()
         val added = if (key in next) false else true
         if (added) next.add(key) else next.remove(key)
-        sp.edit().putStringSet("favorites", next).apply()
+        sp.edit { putStringSet("favorites", next) }
         return added
     }
 
@@ -111,7 +112,7 @@ class Prefs(context: Context) {
                 .sortedBy { json.optJSONObject(it)?.optLong("last", 0) ?: 0 }
             entries.take(json.length() - 300).forEach { json.remove(it) }
         }
-        sp.edit().putString("seen", json.toString()).apply()
+        sp.edit { putString("seen", json.toString()) }
     }
 
     @Synchronized
@@ -158,12 +159,12 @@ class Prefs(context: Context) {
         val trimmed = JSONArray()
         val start = (array.length() - 100).coerceAtLeast(0)
         for (i in start until array.length()) trimmed.put(array.get(i))
-        sp.edit().putString("audit", trimmed.toString()).apply()
+        sp.edit { putString("audit", trimmed.toString()) }
         auditCache = null
     }
 
     fun clearAudit() {
-        sp.edit().remove("audit").apply()
+        sp.edit { remove("audit") }
         auditCache = emptyList()
     }
 }

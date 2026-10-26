@@ -230,7 +230,7 @@ private fun MainShell(
     val motion = MaterialTheme.motionScheme
     val settleJob = remember { mutableStateOf<Job?>(null) }
     val back = remember(nav) { BackGestures(nav) }
-    var backEdge by remember { mutableStateOf(NavigationEvent.EDGE_LEFT) }
+    var backEdge by remember { mutableIntStateOf(NavigationEvent.EDGE_LEFT) }
 
     // On push, slide the new page in and the underlying page a third of the width left.
     var enterFrom by remember { mutableStateOf<Route?>(null) }
@@ -241,7 +241,7 @@ private fun MainShell(
     // Place the snackbar above the tab bar or system navigation bar.
     val density = LocalDensity.current
     val navBarBottom = with(density) { WindowInsets.navigationBars.getBottom(this) }
-    val barHeight = remember { mutableStateOf(0) }
+    val barHeight = remember { mutableIntStateOf(0) }
     val recordBarHeight = remember { { height: Int -> barHeight.value = height } }
     val sink = back.active?.incoming ?: nav.current
     val sinkHasBar = sink !is Route.Page
