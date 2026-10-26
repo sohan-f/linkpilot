@@ -15,24 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
-import androidx.compose.material.icons.rounded.AdminPanelSettings
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Dns
-import androidx.compose.material.icons.rounded.FamilyRestroom
-import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Lan
-import androidx.compose.material.icons.automirrored.rounded.ListAlt
-import androidx.compose.material.icons.rounded.Public
-import androidx.compose.material.icons.rounded.Router
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Security
-import androidx.compose.material.icons.rounded.SettingsEthernet
-import androidx.compose.material.icons.rounded.Shield
-import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material.icons.rounded.WifiFind
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -49,22 +31,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.Capabilities
 import dev.sohan.linkpilot.data.ThemeMode
 import dev.sohan.linkpilot.ui.PageId
+import dev.sohan.linkpilot.ui.components.Choice
 import dev.sohan.linkpilot.ui.components.ConfirmDialog
 import dev.sohan.linkpilot.ui.components.EmptyState
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
 import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.SegmentedField
-import dev.sohan.linkpilot.ui.components.Choice
 import dev.sohan.linkpilot.ui.components.SettingSwitch
 import dev.sohan.linkpilot.vm.RouterUiState
 import dev.sohan.linkpilot.vm.RouterViewModel
@@ -73,30 +57,30 @@ internal data class MoreEntry(
     val page: PageId,
     val title: String,
     val subtitle: String,
-    val icon: ImageVector,
+    @DrawableRes val icon: Int,
     val keywords: String = "",
 )
 
 internal val NETWORK_ENTRIES = listOf(
-    MoreEntry(PageId.Wan, "Internet (WAN)", "Connection type, credentials, MAC clone", Icons.Rounded.Public, "pppoe dhcp static mtu speed"),
-    MoreEntry(PageId.Lan, "LAN & DHCP", "Router address, pool, DNS", Icons.Rounded.Lan, "ip mask dhcp dns subnet"),
-    MoreEntry(PageId.StaticLease, "DHCP reservations", "Fixed addresses for known devices", Icons.AutoMirrored.Rounded.ListAlt, "static lease bind"),
-    MoreEntry(PageId.PortForward, "Port forwarding", "Expose services to the WAN", Icons.Rounded.SettingsEthernet, "nat port map"),
-    MoreEntry(PageId.MacFilter, "MAC filter", "Whitelist or blacklist clients", Icons.Rounded.Security, "mac deny pass whitelist"),
-    MoreEntry(PageId.Firewall, "Firewall & UPnP", "DMZ, DDNS, WAN ping, AP isolation", Icons.Rounded.Shield, "dmz ddns upnp ping isolation"),
-    MoreEntry(PageId.Parental, "Parental controls", "Time windows and URL rules", Icons.Rounded.FamilyRestroom, "kids schedule url filter"),
-    MoreEntry(PageId.Ipv6, "IPv6", "WAN mode and LAN address", Icons.Rounded.Dns, "ipv6 dhcpv6 pppoe"),
-    MoreEntry(PageId.Relay, "Wireless repeating", "WISP, repeater and AP modes", Icons.Rounded.WifiFind, "relay bridge scan upstream"),
+    MoreEntry(PageId.Wan, "Internet (WAN)", "Connection type, credentials, MAC clone", R.drawable.ic_public, "pppoe dhcp static mtu speed"),
+    MoreEntry(PageId.Lan, "LAN & DHCP", "Router address, pool, DNS", R.drawable.ic_lan, "ip mask dhcp dns subnet"),
+    MoreEntry(PageId.StaticLease, "DHCP reservations", "Fixed addresses for known devices", R.drawable.ic_list_alt, "static lease bind"),
+    MoreEntry(PageId.PortForward, "Port forwarding", "Expose services to the WAN", R.drawable.ic_settings_ethernet, "nat port map"),
+    MoreEntry(PageId.MacFilter, "MAC filter", "Whitelist or blacklist clients", R.drawable.ic_security, "mac deny pass whitelist"),
+    MoreEntry(PageId.Firewall, "Firewall & UPnP", "DMZ, DDNS, WAN ping, AP isolation", R.drawable.ic_shield, "dmz ddns upnp ping isolation"),
+    MoreEntry(PageId.Parental, "Parental controls", "Time windows and URL rules", R.drawable.ic_family_restroom, "kids schedule url filter"),
+    MoreEntry(PageId.Ipv6, "IPv6", "WAN mode and LAN address", R.drawable.ic_dns, "ipv6 dhcpv6 pppoe"),
+    MoreEntry(PageId.Relay, "Wireless repeating", "WISP, repeater and AP modes", R.drawable.ic_wifi_find, "relay bridge scan upstream"),
 )
 
 internal val SYSTEM_ENTRIES = listOf(
-    MoreEntry(PageId.Admin, "Administration", "Password, time, remote access, reboot", Icons.Rounded.AdminPanelSettings, "admin password timezone backup reboot reset"),
-    MoreEntry(PageId.Audit, "Audit log", "Every change this app sent", Icons.Rounded.History, "history changes"),
+    MoreEntry(PageId.Admin, "Administration", "Password, time, remote access, reboot", R.drawable.ic_admin_panel_settings, "admin password timezone backup reboot reset"),
+    MoreEntry(PageId.Audit, "Audit log", "Every change this app sent", R.drawable.ic_history, "history changes"),
 )
 
 internal val APP_ENTRIES = listOf(
-    MoreEntry(PageId.About, "About & connection", "Address, session, app details", Icons.Rounded.Info, "address url logout version"),
-    MoreEntry(PageId.Capability, "Capability matrix", "Every endpoint, risk and verification", Icons.Rounded.Tune, "api endpoints parity"),
+    MoreEntry(PageId.About, "About & connection", "Address, session, app details", R.drawable.ic_info, "address url logout version"),
+    MoreEntry(PageId.Capability, "Capability matrix", "Every endpoint, risk and verification", R.drawable.ic_tune, "api endpoints parity"),
 )
 
 // The Appearance section renders no entry rows, so its searchable words are listed separately.
@@ -144,11 +128,11 @@ fun MoreScreen(ui: RouterUiState, vm: RouterViewModel, onNavigate: (PageId) -> U
                     onValueChange = { query = it },
                     label = { Text("Search settings") },
                     placeholder = { Text("e.g. port, password, IPv6") },
-                    leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_search), contentDescription = null) },
                     trailingIcon = {
                         if (query.isNotEmpty()) {
                             IconButton(onClick = { query = "" }) {
-                                Icon(Icons.Rounded.Clear, contentDescription = "Clear search")
+                                Icon(painterResource(R.drawable.ic_clear), contentDescription = "Clear search")
                             }
                         }
                     },
@@ -215,7 +199,7 @@ fun MoreScreen(ui: RouterUiState, vm: RouterViewModel, onNavigate: (PageId) -> U
                 SectionCard {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            Icons.Rounded.Router,
+                            painterResource(R.drawable.ic_router),
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -271,7 +255,7 @@ private fun EntryRow(entry: MoreEntry, modifier: Modifier = Modifier, onClick: (
                 color = MaterialTheme.colorScheme.secondaryContainer,
             ) {
                 Icon(
-                    entry.icon,
+                    painterResource(entry.icon),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSecondaryContainer,
                     modifier = Modifier
@@ -296,7 +280,7 @@ private fun EntryRow(entry: MoreEntry, modifier: Modifier = Modifier, onClick: (
                 )
             }
             Icon(
-                Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                painterResource(R.drawable.ic_keyboard_arrow_right),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )

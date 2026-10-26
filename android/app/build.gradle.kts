@@ -18,6 +18,7 @@ val releaseKeystore = signingValue("storeFile", "LINKPILOT_KEYSTORE")?.let { roo
 android {
     namespace = "dev.sohan.linkpilot"
     compileSdk = 37
+    compileSdkMinor = 2
 
     defaultConfig {
         applicationId = "dev.sohan.linkpilot"
@@ -68,7 +69,7 @@ kotlin {
 }
 
 dependencies {
-    val compose = "1.13.0-alpha01"
+    val compose = "1.13.0-beta02"
 
     implementation("androidx.core:core-ktx:1.19.1")
     implementation("androidx.activity:activity-compose:1.13.0")
@@ -80,8 +81,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:$compose")
     implementation("androidx.compose.animation:animation:$compose")
     implementation("androidx.compose.ui:ui-tooling-preview:$compose")
-    implementation("androidx.compose.material3:material3:1.5.0-alpha28")
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    implementation("androidx.compose.material3:material3:1.5.0-beta02")
 
     implementation("com.squareup.okhttp3:okhttp:5.5.0")
     implementation("com.google.zxing:core:3.5.3")

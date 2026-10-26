@@ -8,7 +8,6 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -19,15 +18,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Devices
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Insights
-import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShortNavigationBar
 import androidx.compose.material3.ShortNavigationBarItem
@@ -51,12 +45,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,9 +60,7 @@ import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.NavigationEventTransitionState
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.ui.components.AppSnackbarHost
 import dev.sohan.linkpilot.ui.components.LoadingBlock
 import dev.sohan.linkpilot.ui.components.LocalSnackbarHostState
@@ -96,6 +89,9 @@ import dev.sohan.linkpilot.ui.theme.LinkPilotTheme
 import dev.sohan.linkpilot.vm.RouterUiState
 import dev.sohan.linkpilot.vm.RouterViewModel
 import dev.sohan.linkpilot.vm.SessionPhase
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 sealed interface Route {
     data object Home : Route
@@ -164,7 +160,7 @@ class NavState {
     }
 }
 
-private data class Tab(val route: Route, val label: String, val icon: ImageVector)
+private data class Tab(val route: Route, val label: String, @DrawableRes val icon: Int)
 
 @Composable
 fun LinkPilotApp(vm: RouterViewModel) {
@@ -219,11 +215,11 @@ private fun MainShell(
 
     val tabs = remember {
         listOf(
-            Tab(Route.Home, "Home", Icons.Rounded.Home),
-            Tab(Route.Devices, "Devices", Icons.Rounded.Devices),
-            Tab(Route.Wifi, "Wi-Fi", Icons.Rounded.Wifi),
-            Tab(Route.Monitor, "Monitor", Icons.Rounded.Insights),
-            Tab(Route.More, "More", Icons.Rounded.MoreHoriz),
+            Tab(Route.Home, "Home", R.drawable.ic_home),
+            Tab(Route.Devices, "Devices", R.drawable.ic_devices),
+            Tab(Route.Wifi, "Wi-Fi", R.drawable.ic_wifi),
+            Tab(Route.Monitor, "Monitor", R.drawable.ic_insights),
+            Tab(Route.More, "More", R.drawable.ic_more_horiz),
         )
     }
 
@@ -231,6 +227,7 @@ private fun MainShell(
     // Keep stacked destinations composed to preserve their scroll state.
     val states = rememberSaveableStateHolder()
     val slide = remember { Animatable(0f) }
+    val motion = MaterialTheme.motionScheme
     val settleJob = remember { mutableStateOf<Job?>(null) }
     val back = remember(nav) { BackGestures(nav) }
     var backEdge by remember { mutableStateOf(NavigationEvent.EDGE_LEFT) }
@@ -253,7 +250,7 @@ private fun MainShell(
         settleJob.value?.cancel()
         settleJob.value = scope.launch {
             if (from != null) slide.snapTo(from)
-            slide.animateTo(target, spring(dampingRatio = 0.86f, stiffness = 650f))
+            slide.animateTo(target, motion.defaultSpatialSpec())
             after()
             settleJob.value = null
         }
@@ -299,7 +296,7 @@ private fun MainShell(
         if (enterFrom == null) return@LaunchedEffect
         Animatable(enterProgress).animateTo(
             targetValue = 0f,
-            animationSpec = spring(dampingRatio = 1f, stiffness = 700f),
+            animationSpec = motion.defaultSpatialSpec(),
         ) { enterProgress = value }
         enterFrom = null
         enterTo = null
@@ -506,6 +503,7 @@ private fun RouteLayer(
     onBarHeight: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val motion = MaterialTheme.motionScheme
     // Both layers are opaque like a real destination window; without this the destination shows
     // through the outgoing screen's transparent gaps and its navigation-bar strip.
     Column(
@@ -526,7 +524,7 @@ private fun RouteLayer(
                 // Only the content slides; the bar below belongs to the shell and stays put.
                 AnimatedContent(
                     targetState = route,
-                    transitionSpec = { tabTransition(initialState, targetState, tabs) },
+                    transitionSpec = { tabTransition(initialState, targetState, tabs, motion) },
                     label = "tab",
                 ) { tab ->
                     // The tab that slides out is disposed at the end; keep its list where it was.
@@ -542,7 +540,7 @@ private fun RouteLayer(
                     ShortNavigationBarItem(
                         selected = route == tab.route,
                         onClick = { nav.select(tab.route) },
-                        icon = { Icon(tab.icon, contentDescription = null) },
+                        icon = { Icon(painterResource(tab.icon), contentDescription = null) },
                         label = { Text(tab.label) },
                     )
                 }
@@ -568,13 +566,14 @@ private fun tabTransition(
     initial: Route,
     target: Route,
     tabs: List<Tab>,
+    motion: MotionScheme,
 ): ContentTransform {
     val from = tabs.indexOfFirst { it.route == initial }
     val to = tabs.indexOfFirst { it.route == target }
     if (from < 0 || to < 0) return EnterTransition.None togetherWith ExitTransition.None
     val direction = if (to > from) 1 else -1
     // No overshoot: the two layers tile the width exactly, and a bounce would expose the surface.
-    val spec = spring<IntOffset>(dampingRatio = 1f, stiffness = 700f)
+    val spec = motion.defaultSpatialSpec<IntOffset>()
     return slideInHorizontally(spec) { width -> direction * width } togetherWith
         slideOutHorizontally(spec) { width -> -direction * width }
 }

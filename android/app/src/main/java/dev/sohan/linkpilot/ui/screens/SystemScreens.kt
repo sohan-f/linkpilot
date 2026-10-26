@@ -15,18 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DeleteSweep
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Key
-import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.automirrored.rounded.Logout
-import androidx.compose.material.icons.rounded.Router
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Security
-import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -48,9 +36,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.AuditEntry
 import dev.sohan.linkpilot.data.Capabilities
 import dev.sohan.linkpilot.data.Operation
@@ -60,6 +50,7 @@ import dev.sohan.linkpilot.ui.components.Bullet
 import dev.sohan.linkpilot.ui.components.ConfirmDialog
 import dev.sohan.linkpilot.ui.components.EmptyState
 import dev.sohan.linkpilot.ui.components.InfoRow
+import dev.sohan.linkpilot.ui.components.PillTone
 import dev.sohan.linkpilot.ui.components.RiskChip
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
 import dev.sohan.linkpilot.ui.components.SectionCard
@@ -116,10 +107,10 @@ fun CapabilityScreen(onBack: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        StatusPill("${filtered.size} operations", MaterialTheme.colorScheme.primary)
+                        StatusPill("${filtered.size} operations", PillTone.Primary)
                         StatusPill(
                             "${filtered.count { it.verified }} verified",
-                            MaterialTheme.colorScheme.secondary,
+                            PillTone.Secondary,
                         )
                     }
                     Text(
@@ -136,7 +127,7 @@ fun CapabilityScreen(onBack: () -> Unit) {
                     onValueChange = { query = it },
                     label = { Text("Search operations") },
                     placeholder = { Text("path, module, title") },
-                    leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_search), contentDescription = null) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = MaterialTheme.shapes.large,
@@ -207,7 +198,7 @@ private fun OperationCard(op: Operation) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 StatusPill(
                     if (op.verified) "Verified" else "Unverified",
-                    if (op.verified) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
+                    if (op.verified) PillTone.Primary else PillTone.Tertiary,
                 )
                 Text(
                     op.id,
@@ -266,7 +257,7 @@ fun AboutScreen(
                             color = MaterialTheme.colorScheme.primaryContainer,
                         ) {
                             Icon(
-                                Icons.Rounded.Router,
+                                painterResource(R.drawable.ic_router),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .padding(12.dp)
@@ -299,12 +290,12 @@ fun AboutScreen(
                     InfoRow("Session", if (ui.ready) "Signed in" else "Signed out")
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         FilledTonalButton(onClick = { editAddress = true }, modifier = Modifier.weight(1f)) {
-                            Icon(Icons.Rounded.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Icon(painterResource(R.drawable.ic_edit), contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(6.dp))
                             Text("Address")
                         }
                         FilledTonalButton(onClick = { confirmLogout = true }, modifier = Modifier.weight(1f)) {
-                            Icon(Icons.AutoMirrored.Rounded.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Icon(painterResource(R.drawable.ic_logout), contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(6.dp))
                             Text("Sign out")
                         }
@@ -315,7 +306,7 @@ fun AboutScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.large,
                         ) {
-                            Icon(Icons.Rounded.Key, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Icon(painterResource(R.drawable.ic_key), contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(6.dp))
                             Text("Forget saved password")
                         }
@@ -334,7 +325,7 @@ fun AboutScreen(
                         modifier = Modifier.padding(14.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(Icons.Rounded.Tune, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(painterResource(R.drawable.ic_tune), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         Spacer(Modifier.width(12.dp))
                         Column(Modifier.weight(1f)) {
                             Text("Capability matrix", style = MaterialTheme.typography.bodyLarge)
@@ -344,7 +335,7 @@ fun AboutScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                        Icon(Icons.Rounded.Info, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(painterResource(R.drawable.ic_info), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -371,7 +362,7 @@ fun AboutScreen(
             item {
                 SectionCard(title = "Legal") {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Rounded.Security, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(painterResource(R.drawable.ic_security), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(Modifier.width(10.dp))
                         Text(
                             "Not affiliated with Tenda. LinkPilot talks to your own hardware on your own network.",
@@ -389,7 +380,7 @@ fun AboutScreen(
 
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Icon(Icons.Rounded.Language, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Icon(painterResource(R.drawable.ic_language), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text(
                         "API contract and field tables: docs/TENDA_WEB_API.md in the source tree.",
                         style = MaterialTheme.typography.bodySmall,
@@ -463,7 +454,7 @@ fun AuditScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
         actions = {
             if (entries.isNotEmpty()) {
                 IconButton(onClick = { confirmClear = true }) {
-                    Icon(Icons.Rounded.DeleteSweep, contentDescription = "Clear audit log")
+                    Icon(painterResource(R.drawable.ic_delete_sweep), contentDescription = "Clear audit log")
                 }
             }
         },
@@ -489,7 +480,7 @@ fun AuditScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
             }
 
             if (entries.isEmpty()) {
-                item { EmptyState("Nothing yet", "Changes you apply will be listed here.", Icons.Rounded.History) }
+                item { EmptyState("Nothing yet", "Changes you apply will be listed here.", R.drawable.ic_history) }
             }
 
             items(entries, key = { it.id }) { entry -> AuditCard(entry) }
@@ -526,7 +517,7 @@ private fun AuditCard(entry: AuditEntry) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                badge.icon,
+                painterResource(badge.icon),
                 contentDescription = null,
                 tint = badge.color,
             )
@@ -544,7 +535,7 @@ private fun AuditCard(entry: AuditEntry) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            StatusPill(badge.label, badge.color)
+            StatusPill(badge.label, badge.tone)
         }
     }
 }

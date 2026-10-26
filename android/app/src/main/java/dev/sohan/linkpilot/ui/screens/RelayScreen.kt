@@ -14,10 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,8 +33,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.RelayInfo
 import dev.sohan.linkpilot.data.ScanNetwork
 import dev.sohan.linkpilot.ui.SECURITY_CHOICES
@@ -50,8 +48,8 @@ import dev.sohan.linkpilot.ui.components.EmptyState
 import dev.sohan.linkpilot.ui.components.InfoRow
 import dev.sohan.linkpilot.ui.components.LoadingBlock
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
-import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.SecretField
+import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.SegmentedField
 import dev.sohan.linkpilot.ui.relayModeLabel
 import dev.sohan.linkpilot.ui.securityLabel
@@ -66,7 +64,7 @@ fun RelayScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
         title = "Wireless repeating",
         onBack = onBack,
         actions = {
-            IconButton(onClick = vm::refreshRelay) { Icon(Icons.Rounded.Refresh, contentDescription = "Refresh") }
+            IconButton(onClick = vm::refreshRelay) { Icon(painterResource(R.drawable.ic_refresh), contentDescription = "Refresh") }
         },
     ) { padding ->
         if (relay == null) {
@@ -143,13 +141,13 @@ private fun RelayContent(relay: RelayInfo, ui: RouterUiState, vm: RouterViewMode
                     enabled = !ui.scanning,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Icon(Icons.Rounded.Search, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Icon(painterResource(R.drawable.ic_search), contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
                     Text(if (ui.scanning) "Scanning…" else "Scan")
                 }
-                if (ui.scanning) LinearProgressIndicator(Modifier.fillMaxWidth())
+                if (ui.scanning) LinearWavyProgressIndicator(Modifier.fillMaxWidth())
                 if (ui.scan.isEmpty() && !ui.scanning) {
-                    EmptyState("No scan yet", "Tap Scan to list nearby access points.", Icons.Rounded.Wifi)
+                    EmptyState("No scan yet", "Tap Scan to list nearby access points.", R.drawable.ic_wifi)
                 }
             }
         }
@@ -166,7 +164,7 @@ private fun RelayContent(relay: RelayInfo, ui: RouterUiState, vm: RouterViewMode
                     modifier = Modifier.padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(Icons.Rounded.Wifi, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                    Icon(painterResource(R.drawable.ic_wifi), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
                         Text(

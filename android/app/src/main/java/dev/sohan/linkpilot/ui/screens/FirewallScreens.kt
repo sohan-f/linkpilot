@@ -17,11 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,9 +36,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.MacFilterEntry
 import dev.sohan.linkpilot.data.NatSnapshot
 import dev.sohan.linkpilot.data.forFilterMode
@@ -56,8 +53,8 @@ import dev.sohan.linkpilot.ui.components.FormField
 import dev.sohan.linkpilot.ui.components.InfoRow
 import dev.sohan.linkpilot.ui.components.LoadingBlock
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
-import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.SecretField
+import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.SegmentedField
 import dev.sohan.linkpilot.ui.components.SettingSwitch
 import dev.sohan.linkpilot.ui.isIpv4
@@ -73,7 +70,7 @@ fun FirewallScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
         title = "Firewall & UPnP",
         onBack = onBack,
         actions = {
-            IconButton(onClick = vm::refreshNat) { Icon(Icons.Rounded.Refresh, contentDescription = "Refresh") }
+            IconButton(onClick = vm::refreshNat) { Icon(painterResource(R.drawable.ic_refresh), contentDescription = "Refresh") }
         },
     ) { padding ->
         if (nat == null) {
@@ -246,7 +243,7 @@ fun MacFilterScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) 
         title = "MAC filter",
         onBack = onBack,
         actions = {
-            IconButton(onClick = vm::refreshNat) { Icon(Icons.Rounded.Refresh, contentDescription = "Refresh") }
+            IconButton(onClick = vm::refreshNat) { Icon(painterResource(R.drawable.ic_refresh), contentDescription = "Refresh") }
         },
     ) { padding ->
         if (nat == null) {
@@ -349,7 +346,7 @@ private fun MacFilterContent(ui: RouterUiState, vm: RouterViewModel, padding: Pa
                     modifier = Modifier.weight(1f),
                 )
                 FilledTonalButton(onClick = { adding = true }, enabled = entries.size < effectiveLimit) {
-                    Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Icon(painterResource(R.drawable.ic_add), contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(4.dp))
                     Text("Add")
                 }
@@ -429,10 +426,10 @@ private fun MacFilterContent(ui: RouterUiState, vm: RouterViewModel, padding: Pa
                         )
                     }
                     IconButton(onClick = { editing = entry }) {
-                        Icon(Icons.Rounded.Edit, contentDescription = "Edit entry")
+                        Icon(painterResource(R.drawable.ic_edit), contentDescription = "Edit entry")
                     }
                     IconButton(onClick = { allEntries.remove(entry) }) {
-                        Icon(Icons.Rounded.Delete, contentDescription = "Remove entry")
+                        Icon(painterResource(R.drawable.ic_delete), contentDescription = "Remove entry")
                     }
                 }
             }

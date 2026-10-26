@@ -26,22 +26,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.HelpOutline
-import androidx.compose.material.icons.rounded.Block
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Devices
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.LockOpen
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.SettingsEthernet
-import androidx.compose.material.icons.rounded.Shield
-import androidx.compose.material.icons.rounded.Smartphone
-import androidx.compose.material.icons.rounded.Speed
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.StarBorder
-import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -74,6 +58,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -81,7 +66,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.AppContainer
 import dev.sohan.linkpilot.data.Client
 import dev.sohan.linkpilot.ui.components.Caption
@@ -91,6 +76,7 @@ import dev.sohan.linkpilot.ui.components.EmptyState
 import dev.sohan.linkpilot.ui.components.ErrorBlock
 import dev.sohan.linkpilot.ui.components.InfoRow
 import dev.sohan.linkpilot.ui.components.LoadingBlock
+import dev.sohan.linkpilot.ui.components.PillTone
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
 import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.StatusPill
@@ -99,6 +85,7 @@ import dev.sohan.linkpilot.ui.formatSpeed
 import dev.sohan.linkpilot.ui.formatTime
 import dev.sohan.linkpilot.vm.RouterUiState
 import dev.sohan.linkpilot.vm.RouterViewModel
+import kotlinx.coroutines.launch
 
 private fun Client.isBlocked(): Boolean = blocked || !allowed
 
@@ -193,7 +180,7 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                 if (refreshing) {
                     CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
                 } else {
-                    Icon(Icons.Rounded.Refresh, contentDescription = null)
+                    Icon(painterResource(R.drawable.ic_refresh), contentDescription = null)
                 }
             }
         },
@@ -209,11 +196,11 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                     onValueChange = { query = it },
                     label = { Text("Search devices") },
                     placeholder = { Text("Name, IP or MAC") },
-                    leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_search), contentDescription = null) },
                     trailingIcon = {
                         if (query.isNotEmpty()) {
                             IconButton(onClick = { query = "" }) {
-                                Icon(Icons.Rounded.Clear, contentDescription = "Clear search")
+                                Icon(painterResource(R.drawable.ic_clear), contentDescription = "Clear search")
                             }
                         }
                     },
@@ -231,15 +218,15 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
-                        StatusPill("$onlineCount online", MaterialTheme.colorScheme.primary, Icons.Rounded.Wifi)
+                        StatusPill("$onlineCount online", PillTone.Primary, R.drawable.ic_wifi)
                         if (blockedCount > 0) {
-                            StatusPill("$blockedCount blocked", MaterialTheme.colorScheme.error, Icons.Rounded.Block)
+                            StatusPill("$blockedCount blocked", PillTone.Error, R.drawable.ic_block)
                         }
                         if (query.isNotBlank()) {
                             StatusPill(
                                 "${filtered.size} shown",
-                                MaterialTheme.colorScheme.onSurfaceVariant,
-                                Icons.Rounded.Search,
+                                PillTone.Neutral,
+                                R.drawable.ic_search,
                             )
                         }
                     }
@@ -266,7 +253,7 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                     EmptyState(
                         if (query.isBlank()) "No clients connected" else "No matches",
                         if (query.isBlank()) "The router reports an empty client list." else "Try a shorter search term.",
-                        icon = if (query.isBlank()) Icons.Rounded.Devices else Icons.Rounded.Search,
+                        icon = if (query.isBlank()) R.drawable.ic_devices else R.drawable.ic_search,
                     )
                 }
                 else -> {
@@ -355,7 +342,9 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                         onCheckedChange = { vm.toggleFavorite(selected.mac) },
                     ) {
                         Icon(
-                            if (isFavorite) Icons.Rounded.Star else Icons.Rounded.StarBorder,
+                            painterResource(
+                                if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border,
+                            ),
                             contentDescription = "Favourite device",
                             tint = if (isFavorite) MaterialTheme.colorScheme.tertiary
                             else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -369,23 +358,22 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                 ) {
                     StatusPill(
                         if (selected.connectType == "wifi") "Wi-Fi" else "Ethernet",
-                        MaterialTheme.colorScheme.secondary,
-                        if (selected.connectType == "wifi") Icons.Rounded.Wifi else Icons.Rounded.SettingsEthernet,
+                        PillTone.Secondary,
+                        if (selected.connectType == "wifi") R.drawable.ic_wifi else R.drawable.ic_settings_ethernet,
                     )
                     if (selected.isBlocked()) {
-                        StatusPill("Internet blocked", MaterialTheme.colorScheme.error, Icons.Rounded.Block)
+                        StatusPill("Internet blocked", PillTone.Error, R.drawable.ic_block)
                     }
                     if (allowOnly) {
                         val onAllowList = ui.onAllowList(selected.mac)
                         StatusPill(
                             if (onAllowList) "On allow list" else "Not on allow list",
-                            if (onAllowList) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.error,
-                            Icons.Rounded.Shield,
+                            if (onAllowList) PillTone.Primary else PillTone.Error,
+                            R.drawable.ic_shield,
                         )
                     }
                     if (selected.isThisPhone()) {
-                        StatusPill("This phone", MaterialTheme.colorScheme.tertiary, Icons.Rounded.Smartphone)
+                        StatusPill("This phone", PillTone.Tertiary, R.drawable.ic_smartphone)
                     }
                     if (
                         (selected.hostname.isBlank() || selected.hostname.equals("Unknown", true)) &&
@@ -393,8 +381,8 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                     ) {
                         StatusPill(
                             "Unknown device",
-                            MaterialTheme.colorScheme.tertiary,
-                            Icons.AutoMirrored.Rounded.HelpOutline,
+                            PillTone.Tertiary,
+                            R.drawable.ic_help_outline,
                         )
                     }
                 }
@@ -426,7 +414,7 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                         modifier = Modifier.weight(1f),
                         shape = MaterialTheme.shapes.large,
                     ) {
-                        Icon(Icons.Rounded.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Icon(painterResource(R.drawable.ic_edit), contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(6.dp))
                         Text("Rename")
                     }
@@ -435,7 +423,7 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                         modifier = Modifier.weight(1f),
                         shape = MaterialTheme.shapes.large,
                     ) {
-                        Icon(Icons.Rounded.Speed, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Icon(painterResource(R.drawable.ic_speed), contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(6.dp))
                         Text("Limits")
                     }
@@ -461,7 +449,9 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
                         },
                     ) {
                         Icon(
-                            if (isBlocked) Icons.Rounded.LockOpen else Icons.Rounded.Block,
+                            painterResource(
+                                if (isBlocked) R.drawable.ic_lock_open else R.drawable.ic_block,
+                            ),
                             contentDescription = null,
                             modifier = Modifier.size(18.dp),
                         )
@@ -608,7 +598,7 @@ private fun ClientRow(
                     )
                     if (favorite) {
                         Icon(
-                            Icons.Rounded.Star,
+                            painterResource(R.drawable.ic_star),
                             contentDescription = "Favourite device",
                             tint = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier

@@ -24,27 +24,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.HelpOutline
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.Devices
-import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.Inbox
-import androidx.compose.material.icons.rounded.SettingsEthernet
-import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Snackbar
@@ -70,13 +59,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.AuditEntry
 import dev.sohan.linkpilot.data.Risk
 import kotlinx.coroutines.launch
@@ -105,7 +96,6 @@ fun AppSnackbarHost(hostState: SnackbarHostState) {
         val content = if (good) SnackbarDefaults.contentColor else MaterialTheme.colorScheme.onErrorContainer
         Snackbar(
             snackbarData = data,
-            shape = MaterialTheme.shapes.large,
             containerColor = container,
             contentColor = content,
             actionContentColor = content,
@@ -134,7 +124,7 @@ fun ScreenScaffold(
             navigationIcon = {
                 if (onBack != null) {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                        Icon(painterResource(R.drawable.ic_arrow_back), contentDescription = "Back")
                     }
                 }
             },
@@ -234,7 +224,7 @@ fun InfoRow(
         if (canCopy) {
             Spacer(Modifier.width(6.dp))
             Icon(
-                Icons.Rounded.ContentCopy,
+                painterResource(R.drawable.ic_content_copy),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -274,11 +264,32 @@ fun SettingSwitch(
     }
 }
 
+enum class PillTone { Primary, Secondary, Tertiary, Error, Neutral }
+
 @Composable
-fun StatusPill(text: String, color: Color, icon: ImageVector? = null) {
+private fun PillTone.container(): Color = when (this) {
+    PillTone.Primary -> MaterialTheme.colorScheme.primaryContainer
+    PillTone.Secondary -> MaterialTheme.colorScheme.secondaryContainer
+    PillTone.Tertiary -> MaterialTheme.colorScheme.tertiaryContainer
+    PillTone.Error -> MaterialTheme.colorScheme.errorContainer
+    PillTone.Neutral -> MaterialTheme.colorScheme.surfaceContainerHighest
+}
+
+@Composable
+private fun PillTone.onContainer(): Color = when (this) {
+    PillTone.Primary -> MaterialTheme.colorScheme.onPrimaryContainer
+    PillTone.Secondary -> MaterialTheme.colorScheme.onSecondaryContainer
+    PillTone.Tertiary -> MaterialTheme.colorScheme.onTertiaryContainer
+    PillTone.Error -> MaterialTheme.colorScheme.onErrorContainer
+    PillTone.Neutral -> MaterialTheme.colorScheme.onSurfaceVariant
+}
+
+@Composable
+fun StatusPill(text: String, tone: PillTone, @DrawableRes icon: Int? = null) {
+    val content = tone.onContainer()
     Surface(
         shape = CircleShape,
-        color = color.copy(alpha = 0.16f),
+        color = tone.container(),
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -286,12 +297,12 @@ fun StatusPill(text: String, color: Color, icon: ImageVector? = null) {
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             if (icon != null) {
-                Icon(icon, contentDescription = null, modifier = Modifier.size(14.dp), tint = color)
+                Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(14.dp), tint = content)
             }
             Text(
                 text,
                 style = MaterialTheme.typography.labelMedium,
-                color = color,
+                color = content,
             )
         }
     }
@@ -299,48 +310,55 @@ fun StatusPill(text: String, color: Color, icon: ImageVector? = null) {
 
 @Composable
 fun RiskChip(risk: Risk) {
-    val (label, color) = when (risk) {
-        Risk.READ_ONLY -> "Read only" to MaterialTheme.colorScheme.primary
-        Risk.REVERSIBLE -> "Reversible" to MaterialTheme.colorScheme.secondary
-        Risk.DISRUPTIVE -> "Disruptive" to MaterialTheme.colorScheme.tertiary
-        Risk.DESTRUCTIVE -> "Destructive" to MaterialTheme.colorScheme.error
+    val (label, tone) = when (risk) {
+        Risk.READ_ONLY -> "Read only" to PillTone.Primary
+        Risk.REVERSIBLE -> "Reversible" to PillTone.Secondary
+        Risk.DISRUPTIVE -> "Disruptive" to PillTone.Tertiary
+        Risk.DESTRUCTIVE -> "Destructive" to PillTone.Error
     }
-    Surface(shape = CircleShape, color = color.copy(alpha = 0.14f)) {
+    Surface(shape = CircleShape, color = tone.container()) {
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = color,
+            color = tone.onContainer(),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
         )
     }
 }
 
-data class AuditBadge(val label: String, val color: Color, val icon: ImageVector)
+data class AuditBadge(val label: String, val color: Color, val tone: PillTone, @DrawableRes val icon: Int)
 
 /** One outcome vocabulary for the Home preview and the full audit log. */
 @Composable
 fun auditBadge(entry: AuditEntry): AuditBadge {
     val label: String
     val color: Color
-    val icon: ImageVector
+    val tone: PillTone
+    @DrawableRes val icon: Int
     when {
         entry.outcome == "APPLIED" -> {
-            label = "Applied"; color = MaterialTheme.colorScheme.primary; icon = Icons.Rounded.CheckCircle
+            label = "Applied"; color = MaterialTheme.colorScheme.primary; tone = PillTone.Primary
+            icon = R.drawable.ic_check_circle
         }
         entry.outcome == "EXPIRED" -> {
-            label = "Session expired"; color = MaterialTheme.colorScheme.error; icon = Icons.Rounded.ErrorOutline
+            label = "Session expired"; color = MaterialTheme.colorScheme.error; tone = PillTone.Error
+            icon = R.drawable.ic_error_outline
         }
         entry.outcome == "UNKNOWN" -> {
-            label = "Unconfirmed"; color = MaterialTheme.colorScheme.tertiary; icon = Icons.AutoMirrored.Rounded.HelpOutline
+            label = "Unconfirmed"; color = MaterialTheme.colorScheme.tertiary; tone = PillTone.Tertiary
+            icon = R.drawable.ic_help_outline
         }
         entry.outcome.startsWith("REJECTED") -> {
-            label = "Rejected"; color = MaterialTheme.colorScheme.error; icon = Icons.Rounded.ErrorOutline
+            label = "Rejected"; color = MaterialTheme.colorScheme.error; tone = PillTone.Error
+            icon = R.drawable.ic_error_outline
         }
         else -> {
-            label = entry.outcome; color = MaterialTheme.colorScheme.onSurfaceVariant; icon = Icons.Rounded.History
+            label = entry.outcome; color = MaterialTheme.colorScheme.onSurfaceVariant
+            tone = PillTone.Neutral
+            icon = R.drawable.ic_history
         }
     }
-    return AuditBadge(label, color, icon)
+    return AuditBadge(label, color, tone, icon)
 }
 
 /** A bulleted statement; the dot is decorative and kept out of the accessibility tree. */
@@ -476,7 +494,7 @@ fun LoadingBlock(label: String = "Loading from router") {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        LinearProgressIndicator(Modifier.width(120.dp))
+        LinearWavyProgressIndicator(Modifier.width(120.dp))
         Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
@@ -492,7 +510,7 @@ fun ErrorBlock(message: String, onRetry: (() -> Unit)? = null) {
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(Icons.Rounded.ErrorOutline, contentDescription = null, tint = MaterialTheme.colorScheme.onErrorContainer)
+            Icon(painterResource(R.drawable.ic_error_outline), contentDescription = null, tint = MaterialTheme.colorScheme.onErrorContainer)
             Spacer(Modifier.width(12.dp))
             Text(
                 message,
@@ -516,7 +534,7 @@ fun ErrorBlock(message: String, onRetry: (() -> Unit)? = null) {
 fun EmptyState(
     title: String,
     subtitle: String,
-    icon: ImageVector = Icons.Rounded.Inbox,
+    @DrawableRes icon: Int = R.drawable.ic_inbox,
 ) {
     Column(
         modifier = Modifier
@@ -525,7 +543,7 @@ fun EmptyState(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(32.dp))
+        Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(32.dp))
         Text(title, style = MaterialTheme.typography.titleMedium)
         Text(
             subtitle,
@@ -540,7 +558,7 @@ fun EmptyState(
 fun MetricTile(
     label: String,
     value: String,
-    icon: ImageVector,
+    @DrawableRes icon: Int,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -552,7 +570,7 @@ fun MetricTile(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+            Icon(painterResource(icon), contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
             Text(
                 value,
                 style = MaterialTheme.typography.titleMediumEmphasized,
@@ -573,7 +591,7 @@ fun MetricTile(
 @Composable
 fun QuickAction(
     label: String,
-    icon: ImageVector,
+    @DrawableRes icon: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
@@ -590,7 +608,7 @@ fun QuickAction(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Icon(icon, contentDescription = null, tint = contentColor)
+            Icon(painterResource(icon), contentDescription = null, tint = contentColor)
             Text(
                 label,
                 style = MaterialTheme.typography.labelMedium,
@@ -630,7 +648,7 @@ fun DeviceAvatar(label: String, wifi: Boolean, modifier: Modifier = Modifier, bl
                 )
             } else {
                 Icon(
-                    Icons.Rounded.Devices,
+                    painterResource(R.drawable.ic_devices),
                     contentDescription = null,
                     tint = contentColor,
                     modifier = Modifier.size(22.dp),
@@ -645,7 +663,7 @@ fun DeviceAvatar(label: String, wifi: Boolean, modifier: Modifier = Modifier, bl
                 .size(18.dp),
         ) {
             Icon(
-                if (wifi) Icons.Rounded.Wifi else Icons.Rounded.SettingsEthernet,
+                painterResource(if (wifi) R.drawable.ic_wifi else R.drawable.ic_settings_ethernet),
                 contentDescription = null,
                 modifier = Modifier.padding(3.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,

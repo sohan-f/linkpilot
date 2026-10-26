@@ -21,9 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Router
-import androidx.compose.material.icons.rounded.Security
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
@@ -41,11 +38,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.ui.baseUrlHost
 import dev.sohan.linkpilot.ui.components.ErrorBlock
 import dev.sohan.linkpilot.ui.components.FormField
@@ -108,7 +107,7 @@ fun LoginScreen(
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
-                        Icons.Rounded.Router,
+                        painterResource(R.drawable.ic_router),
                         contentDescription = null,
                         modifier = Modifier.size(48.dp),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -194,7 +193,7 @@ fun LoginScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.large,
                         ) {
-                            Icon(Icons.Rounded.Security, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Icon(painterResource(R.drawable.ic_security), contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(8.dp))
                             Text("Restore saved session")
                         }
@@ -221,7 +220,7 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Icon(
-                    Icons.Rounded.Security,
+                    painterResource(R.drawable.ic_security),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(16.dp),

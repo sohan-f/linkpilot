@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -25,8 +23,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.Ipv6Snapshot
 import dev.sohan.linkpilot.ui.components.Caption
 import dev.sohan.linkpilot.ui.components.Choice
@@ -53,7 +53,7 @@ fun Ipv6Screen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
         title = "IPv6",
         onBack = onBack,
         actions = {
-            IconButton(onClick = vm::refreshIpv6) { Icon(Icons.Rounded.Refresh, contentDescription = "Refresh") }
+            IconButton(onClick = vm::refreshIpv6) { Icon(painterResource(R.drawable.ic_refresh), contentDescription = "Refresh") }
         },
     ) { padding ->
         if (ipv6 == null) {

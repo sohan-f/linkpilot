@@ -4,6 +4,8 @@ package dev.sohan.linkpilot.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -105,7 +107,39 @@ private val DarkScheme = darkColorScheme(
 )
 
 private val LinkPilotTypography = Typography()
-private val LinkPilotMotion = MotionScheme.standard()
+
+private object LinkPilotMotion : MotionScheme {
+    private val spatialDefault = spring<Any>(dampingRatio = 1f, stiffness = 700f)
+    private val spatialFast = spring<Any>(dampingRatio = 1f, stiffness = 1400f)
+    private val spatialSlow = spring<Any>(dampingRatio = 1f, stiffness = 300f)
+    private val effectsDefault = spring<Any>(dampingRatio = 1f, stiffness = 1600f)
+    private val effectsFast = spring<Any>(dampingRatio = 1f, stiffness = 3800f)
+    private val effectsSlow = spring<Any>(dampingRatio = 1f, stiffness = 800f)
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> defaultSpatialSpec(): FiniteAnimationSpec<T> =
+        spatialDefault as FiniteAnimationSpec<T>
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> fastSpatialSpec(): FiniteAnimationSpec<T> =
+        spatialFast as FiniteAnimationSpec<T>
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> slowSpatialSpec(): FiniteAnimationSpec<T> =
+        spatialSlow as FiniteAnimationSpec<T>
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> defaultEffectsSpec(): FiniteAnimationSpec<T> =
+        effectsDefault as FiniteAnimationSpec<T>
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> fastEffectsSpec(): FiniteAnimationSpec<T> =
+        effectsFast as FiniteAnimationSpec<T>
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> slowEffectsSpec(): FiniteAnimationSpec<T> =
+        effectsSlow as FiniteAnimationSpec<T>
+}
 
 /** M3's ten-step corner scale; the two increased steps are the Expressive additions. */
 private val LinkPilotShapes = Shapes(
@@ -154,7 +188,6 @@ fun LinkPilotTheme(
 
     MaterialExpressiveTheme(
         colorScheme = scheme,
-        // Standard springs keep taps and tabs immediate; expressive motion is intentionally slow.
         motionScheme = LinkPilotMotion,
         shapes = LinkPilotShapes,
         typography = LinkPilotTypography,

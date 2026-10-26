@@ -21,19 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CloudOff
-import androidx.compose.material.icons.rounded.Devices
-import androidx.compose.material.icons.rounded.Download
-import androidx.compose.material.icons.rounded.Insights
-import androidx.compose.material.icons.rounded.PowerSettingsNew
-import androidx.compose.material.icons.rounded.QrCode2
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Schedule
-import androidx.compose.material.icons.rounded.Sync
-import androidx.compose.material.icons.rounded.Upload
-import androidx.compose.material.icons.rounded.WarningAmber
-import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -54,9 +41,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.AuditEntry
 import dev.sohan.linkpilot.data.InternetStatus
 import dev.sohan.linkpilot.data.StatusSnapshot
@@ -97,10 +86,10 @@ fun HomeScreen(
         title = "Home",
         actions = {
             IconButton(onClick = { showQr = true }, enabled = ui.wifi != null) {
-                Icon(Icons.Rounded.QrCode2, contentDescription = "Share Wi-Fi")
+                Icon(painterResource(R.drawable.ic_qr_code2), contentDescription = "Share Wi-Fi")
             }
             IconButton(onClick = vm::refreshStatus) {
-                Icon(Icons.Rounded.Refresh, contentDescription = "Refresh status")
+                Icon(painterResource(R.drawable.ic_refresh), contentDescription = "Refresh status")
             }
         },
     ) { padding ->
@@ -151,13 +140,13 @@ fun HomeScreen(
                         MetricTile(
                             "Download",
                             formatSpeed(status.stats.downKbps),
-                            Icons.Rounded.Download,
+                            R.drawable.ic_download,
                             Modifier.weight(1f),
                         )
                         MetricTile(
                             "Upload",
                             formatSpeed(status.stats.upKbps),
-                            Icons.Rounded.Upload,
+                            R.drawable.ic_upload,
                             Modifier.weight(1f),
                         )
                     }
@@ -167,13 +156,13 @@ fun HomeScreen(
                         MetricTile(
                             "Clients online",
                             status.stats.online.toString(),
-                            Icons.Rounded.Devices,
+                            R.drawable.ic_devices,
                             Modifier.weight(1f),
                         )
                         MetricTile(
                             "Uptime",
                             formatUptime(status.system.uptimeSeconds),
-                            Icons.Rounded.Schedule,
+                            R.drawable.ic_schedule,
                             Modifier.weight(1f),
                         )
                     }
@@ -200,12 +189,12 @@ fun HomeScreen(
             item {
                 SectionCard(title = "Quick actions") {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        QuickAction("Wi-Fi", Icons.Rounded.Wifi, onOpenWifi, Modifier.weight(1f))
-                        QuickAction("Devices", Icons.Rounded.Devices, onOpenDevices, Modifier.weight(1f))
-                        QuickAction("Monitor", Icons.Rounded.Insights, onOpenMonitor, Modifier.weight(1f))
+                        QuickAction("Wi-Fi", R.drawable.ic_wifi, onOpenWifi, Modifier.weight(1f))
+                        QuickAction("Devices", R.drawable.ic_devices, onOpenDevices, Modifier.weight(1f))
+                        QuickAction("Monitor", R.drawable.ic_insights, onOpenMonitor, Modifier.weight(1f))
                         QuickAction(
                             "Reboot",
-                            Icons.Rounded.PowerSettingsNew,
+                            R.drawable.ic_power_settings_new,
                             { confirmReboot = true },
                             Modifier.weight(1f),
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
@@ -236,7 +225,7 @@ fun HomeScreen(
                         title = "Needs attention",
                         trailing = {
                             Icon(
-                                Icons.Rounded.WarningAmber,
+                                painterResource(R.drawable.ic_warning_amber),
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.error,
                                 modifier = Modifier.size(20.dp),
@@ -393,11 +382,13 @@ private fun ConnectionOrb(tone: Tone, tint: Color) {
             }
         }
         Icon(
-            when (tone) {
-                Tone.GOOD -> Icons.Rounded.Wifi
-                Tone.WORKING -> Icons.Rounded.Sync
-                Tone.BAD -> Icons.Rounded.CloudOff
-            },
+            painterResource(
+                when (tone) {
+                    Tone.GOOD -> R.drawable.ic_wifi
+                    Tone.WORKING -> R.drawable.ic_sync
+                    Tone.BAD -> R.drawable.ic_cloud_off
+                },
+            ),
             contentDescription = null,
             tint = tint,
             modifier = Modifier.size(30.dp),
@@ -417,7 +408,7 @@ private fun AuditRow(entry: AuditEntry) {
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(badge.icon, contentDescription = null, tint = badge.color)
+            Icon(painterResource(badge.icon), contentDescription = null, tint = badge.color)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(
