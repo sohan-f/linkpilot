@@ -5,57 +5,75 @@
     android:drawable="@drawable/ic_home_states">
     <target android:name="outline">
         <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="1"
-                android:valueTo="0"
-                android:duration="120"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:duration="260"
+                    android:startOffset="0"
+                    android:interpolator="@android:interpolator/accelerate_decelerate" />
         </aapt:attr>
     </target>
-    <target android:name="g_house">
+    <target android:name="g_walls">
         <aapt:attr name="android:animation">
             <set android:ordering="together">
                     <objectAnimator
                         android:propertyName="translateY"
-                        android:valueFrom="-105"
+                        android:valueFrom="90"
                         android:valueTo="0"
-                        android:duration="310"
-                        android:startOffset="0"
-                        android:interpolator="@android:interpolator/overshoot" />
-                    <objectAnimator
-                        android:propertyName="scaleX"
-                        android:valueFrom="0.84"
-                        android:valueTo="1"
-                        android:duration="310"
+                        android:duration="300"
                         android:startOffset="0"
                         android:interpolator="@android:interpolator/overshoot" />
                     <objectAnimator
                         android:propertyName="scaleY"
-                        android:valueFrom="0.90"
+                        android:valueFrom="0.9"
                         android:valueTo="1"
-                        android:duration="310"
-                        android:startOffset="0"
-                        android:interpolator="@android:interpolator/overshoot" />
-                    <objectAnimator
-                        android:propertyName="rotation"
-                        android:valueFrom="4"
-                        android:valueTo="0"
-                        android:duration="310"
+                        android:duration="300"
                         android:startOffset="0"
                         android:interpolator="@android:interpolator/overshoot" />
             </set>
         </aapt:attr>
     </target>
-    <target android:name="p_house">
+    <target android:name="p_walls">
         <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="0"
-                android:valueTo="1"
-                android:duration="90"
-                android:startOffset="0"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="90"
+                    android:startOffset="0"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
+        </aapt:attr>
+    </target>
+    <target android:name="g_roof">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                    <objectAnimator
+                        android:propertyName="translateY"
+                        android:valueFrom="-95"
+                        android:valueTo="0"
+                        android:duration="320"
+                        android:startOffset="70"
+                        android:interpolator="@android:interpolator/overshoot" />
+                    <objectAnimator
+                        android:propertyName="rotation"
+                        android:valueFrom="-6"
+                        android:valueTo="0"
+                        android:duration="320"
+                        android:startOffset="70"
+                        android:interpolator="@android:interpolator/overshoot" />
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="p_roof">
+        <aapt:attr name="android:animation">
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="90"
+                    android:startOffset="70"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
         </aapt:attr>
     </target>
 </animated-vector>
