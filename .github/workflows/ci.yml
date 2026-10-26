@@ -34,7 +34,7 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           [ -x "$SDKMANAGER" ] || SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -print -quit)
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" --install "platforms;android-37.0" "build-tools;37.0.0"
+          "$SDKMANAGER" --install "platforms;android-37.2" "build-tools;37.0.0"
 
       - name: Build debug APK
         working-directory: android
@@ -60,7 +60,7 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           [ -x "$SDKMANAGER" ] || SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -print -quit)
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" --install "platforms;android-37.0" "build-tools;37.0.0"
+          "$SDKMANAGER" --install "platforms;android-37.2" "build-tools;37.0.0"
 
       - name: Run unit tests
         working-directory: android
@@ -94,7 +94,7 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           [ -x "$SDKMANAGER" ] || SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -print -quit)
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" --install "platforms;android-37.0" "build-tools;37.0.0"
+          "$SDKMANAGER" --install "platforms;android-37.2" "build-tools;37.0.0"
 
       - name: Run lint
         working-directory: android

@@ -6,14 +6,19 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing tag to build and publish (for example v1.0.0)
-        required: true
+        description: Existing tag to build (leave empty to build the selected ref)
+        required: false
+      publish:
+        description: Publish a GitHub release; turn off to only build and collect the artifacts
+        type: boolean
+        default: true
 
 permissions:
   contents: write
 
 env:
   RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  PUBLISH: ${{ github.event_name != 'workflow_dispatch' || inputs.publish }}
 
 jobs:
   release:
@@ -23,7 +28,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag) || github.ref }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag != '' && format('refs/tags/{0}', inputs.tag) || github.ref }}
 
       - name: Set up JDK
         uses: actions/setup-java@v6
@@ -39,7 +44,20 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           [ -x "$SDKMANAGER" ] || SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -print -quit)
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" --install "platforms;android-37.0" "build-tools;37.0.0"
+          "$SDKMANAGER" --install "platforms;android-37.2" "build-tools;37.0.0"
+
+      - name: Require a tag when publishing
+        if: env.PUBLISH == 'true' && env.RELEASE_TAG == ''
+        run: |
+          echo "::error::A tag is required to publish a release."
+          exit 1
+
+      - name: Resolve version
+        id: version
+        run: |
+          label="${RELEASE_TAG:-run-$GITHUB_RUN_NUMBER}"
+          echo "label=$label" >> "$GITHUB_OUTPUT"
+          echo "name=${label#v}" >> "$GITHUB_OUTPUT"
 
       - name: Decode release keystore
         env:
@@ -57,7 +75,7 @@ jobs:
           LINKPILOT_KEY_PASSWORD: ${{ secrets.LINKPILOT_KEY_PASSWORD }}
         run: |
           ./gradlew :app:assembleRelease :app:bundleRelease \
-            -PversionName="${RELEASE_TAG#v}" \
+            -PversionName="${{ steps.version.outputs.name }}" \
             -PversionCode="$GITHUB_RUN_NUMBER" \
             --console=plain
 
@@ -68,10 +86,21 @@ jobs:
 
       - name: Name artifacts
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk "linkpilot-$RELEASE_TAG.apk"
-          cp android/app/build/outputs/bundle/release/app-release.aab "linkpilot-$RELEASE_TAG.aab"
+          cp android/app/build/outputs/apk/release/app-release.apk "linkpilot-${{ steps.version.outputs.label }}.apk"
+          cp android/app/build/outputs/bundle/release/app-release.aab "linkpilot-${{ steps.version.outputs.label }}.aab"
+
+      - name: Upload build artifacts
+        if: env.PUBLISH != 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: linkpilot-${{ steps.version.outputs.label }}
+          path: |
+            linkpilot-${{ steps.version.outputs.label }}.apk
+            linkpilot-${{ steps.version.outputs.label }}.aab
+          if-no-files-found: error
 
       - name: Publish GitHub release
+        if: env.PUBLISH == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
