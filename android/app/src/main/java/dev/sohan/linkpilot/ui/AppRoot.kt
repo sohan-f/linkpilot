@@ -160,7 +160,12 @@ class NavState {
     }
 }
 
-private data class Tab(val route: Route, val label: String, @DrawableRes val icon: Int)
+private data class Tab(
+    val route: Route,
+    val label: String,
+    @DrawableRes val icon: Int,
+    @DrawableRes val iconSelected: Int,
+)
 
 @Composable
 fun LinkPilotApp(vm: RouterViewModel) {
@@ -215,11 +220,11 @@ private fun MainShell(
 
     val tabs = remember {
         listOf(
-            Tab(Route.Home, "Home", R.drawable.ic_home),
-            Tab(Route.Devices, "Devices", R.drawable.ic_devices),
-            Tab(Route.Wifi, "Wi-Fi", R.drawable.ic_wifi),
-            Tab(Route.Monitor, "Monitor", R.drawable.ic_insights),
-            Tab(Route.More, "More", R.drawable.ic_more_horiz),
+            Tab(Route.Home, "Home", R.drawable.ic_home, R.drawable.ic_home_filled),
+            Tab(Route.Devices, "Devices", R.drawable.ic_devices, R.drawable.ic_devices_filled),
+            Tab(Route.Wifi, "Wi-Fi", R.drawable.ic_wifi, R.drawable.ic_wifi_filled),
+            Tab(Route.Monitor, "Monitor", R.drawable.ic_insights, R.drawable.ic_insights_filled),
+            Tab(Route.More, "More", R.drawable.ic_more_horiz, R.drawable.ic_more_horiz_filled),
         )
     }
 
@@ -537,10 +542,16 @@ private fun RouteLayer(
         if (route !is Route.Page) {
             ShortNavigationBar(modifier = Modifier.onSizeChanged { onBarHeight(it.height) }) {
                 tabs.forEach { tab ->
+                    val selected = route == tab.route
                     ShortNavigationBarItem(
-                        selected = route == tab.route,
+                        selected = selected,
                         onClick = { nav.select(tab.route) },
-                        icon = { Icon(painterResource(tab.icon), contentDescription = null) },
+                        icon = {
+                            Icon(
+                                painterResource(if (selected) tab.iconSelected else tab.icon),
+                                contentDescription = null,
+                            )
+                        },
                         label = { Text(tab.label) },
                     )
                 }
