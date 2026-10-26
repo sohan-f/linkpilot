@@ -5,12 +5,13 @@
     android:drawable="@drawable/ic_devices_states">
     <target android:name="outline">
         <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="1"
-                android:valueTo="0"
-                android:duration="120"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:duration="260"
+                    android:startOffset="0"
+                    android:interpolator="@android:interpolator/accelerate_decelerate" />
         </aapt:attr>
     </target>
     <target android:name="g_stand">
@@ -18,130 +19,79 @@
             <set android:ordering="together">
                     <objectAnimator
                         android:propertyName="scaleX"
-                        android:valueFrom="0.15"
+                        android:valueFrom="0.06"
                         android:valueTo="1"
-                        android:duration="230"
+                        android:duration="260"
                         android:startOffset="0"
-                        android:interpolator="@android:interpolator/fast_out_slow_in" />
+                        android:interpolator="@android:interpolator/overshoot" />
+                    <objectAnimator
+                        android:propertyName="scaleY"
+                        android:valueFrom="0.6"
+                        android:valueTo="1"
+                        android:duration="260"
+                        android:startOffset="0"
+                        android:interpolator="@android:interpolator/overshoot" />
             </set>
         </aapt:attr>
     </target>
     <target android:name="p_stand">
         <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="0"
-                android:valueTo="1"
-                android:duration="110"
-                android:startOffset="0"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="80"
+                    android:startOffset="0"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
         </aapt:attr>
     </target>
-    <target android:name="g_monitor">
+    <target android:name="g_screen">
         <aapt:attr name="android:animation">
             <set android:ordering="together">
                     <objectAnimator
                         android:propertyName="translateY"
-                        android:valueFrom="-75"
+                        android:valueFrom="-140"
                         android:valueTo="0"
-                        android:duration="250"
-                        android:startOffset="30"
+                        android:duration="330"
+                        android:startOffset="80"
                         android:interpolator="@android:interpolator/overshoot" />
                     <objectAnimator
                         android:propertyName="scaleX"
-                        android:valueFrom="0.90"
+                        android:valueFrom="1.06"
                         android:valueTo="1"
-                        android:duration="250"
-                        android:startOffset="30"
+                        android:duration="330"
+                        android:startOffset="80"
+                        android:interpolator="@android:interpolator/overshoot" />
+                    <objectAnimator
+                        android:propertyName="scaleY"
+                        android:valueFrom="0.84"
+                        android:valueTo="1"
+                        android:duration="330"
+                        android:startOffset="80"
                         android:interpolator="@android:interpolator/overshoot" />
             </set>
         </aapt:attr>
     </target>
     <target android:name="p_monitor">
         <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="0"
-                android:valueTo="1"
-                android:duration="120"
-                android:startOffset="30"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
-        </aapt:attr>
-    </target>
-    <target android:name="g_phone">
-        <aapt:attr name="android:animation">
-            <set android:ordering="together">
-                    <objectAnimator
-                        android:propertyName="translateX"
-                        android:valueFrom="120"
-                        android:valueTo="0"
-                        android:duration="270"
-                        android:startOffset="55"
-                        android:interpolator="@android:interpolator/overshoot" />
-                    <objectAnimator
-                        android:propertyName="scaleX"
-                        android:valueFrom="0.68"
-                        android:valueTo="1"
-                        android:duration="270"
-                        android:startOffset="55"
-                        android:interpolator="@android:interpolator/overshoot" />
-                    <objectAnimator
-                        android:propertyName="scaleY"
-                        android:valueFrom="0.68"
-                        android:valueTo="1"
-                        android:duration="270"
-                        android:startOffset="55"
-                        android:interpolator="@android:interpolator/overshoot" />
-                    <objectAnimator
-                        android:propertyName="rotation"
-                        android:valueFrom="11"
-                        android:valueTo="0"
-                        android:duration="270"
-                        android:startOffset="55"
-                        android:interpolator="@android:interpolator/overshoot" />
-            </set>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="110"
+                    android:startOffset="80"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
         </aapt:attr>
     </target>
     <target android:name="p_phone">
         <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="0"
-                android:valueTo="1"
-                android:duration="120"
-                android:startOffset="90"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
-        </aapt:attr>
-    </target>
-    <target android:name="g_camera">
-        <aapt:attr name="android:animation">
-            <set android:ordering="together">
-                    <objectAnimator
-                        android:propertyName="scaleX"
-                        android:valueFrom="0.08"
-                        android:valueTo="1"
-                        android:duration="190"
-                        android:startOffset="200"
-                        android:interpolator="@android:interpolator/overshoot" />
-                    <objectAnimator
-                        android:propertyName="scaleY"
-                        android:valueFrom="0.08"
-                        android:valueTo="1"
-                        android:duration="190"
-                        android:startOffset="200"
-                        android:interpolator="@android:interpolator/overshoot" />
-            </set>
-        </aapt:attr>
-    </target>
-    <target android:name="p_camera">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:propertyName="fillAlpha"
-                android:valueFrom="0"
-                android:valueTo="1"
-                android:duration="100"
-                android:startOffset="200"
-                android:interpolator="@android:interpolator/fast_out_slow_in" />
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:duration="110"
+                    android:startOffset="80"
+                    android:interpolator="@android:interpolator/fast_out_slow_in" />
         </aapt:attr>
     </target>
 </animated-vector>

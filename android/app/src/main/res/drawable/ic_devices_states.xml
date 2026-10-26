@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Material Symbols Rounded: devices (default + fill1), layered for ic_devices_animated -->
+<!-- Material Symbols Rounded: devices (default + fill1), layered for ic_devices_animated.
+     The phone owns the camera hole, so both subpaths stay in one path (nonzero). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
@@ -13,9 +14,10 @@
             android:pathData="M480-540Zm-40 380H120q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h320q17 0 28.5 11.5T480-200q0 17-11.5 28.5T440-160ZM200-280q-33 0-56.5-23.5T120-360v-360q0-33 23.5-56.5T200-800h600q17 0 28.5 11.5T840-760q0 17-11.5 28.5T800-720H200v360h240q17 0 28.5 11.5T480-320q0 17-11.5 28.5T440-280H200Zm600 40v-320H640v320h160Zm-180 80q-25 0-42.5-17.5T560-220v-360q0-25 17.5-42.5T620-640h200q25 0 42.5 17.5T880-580v360q0 25-17.5 42.5T820-160H620Zm100-300q13 0 21.5-9t8.5-21q0-13-8.5-21.5T720-520q-12 0-21 8.5t-9 21.5q0 12 9 21t21 9Zm0 60Z" />
         <group
             android:name="g_stand"
-            android:pivotX="280"
+            android:pivotX="80"
             android:pivotY="-200"
-            android:scaleX="0.15">
+            android:scaleX="0.06"
+            android:scaleY="0.6">
             <path
                 android:name="p_stand"
                 android:fillColor="#FF000000"
@@ -23,42 +25,22 @@
                 android:pathData="M440 -160H120q-17 0-28.5-11.5T80-200q0-17 11.5-28.5T120-240h320q17 0 28.5 11.5T480-200q0 17-11.5 28.5T440-160Z" />
         </group>
         <group
-            android:name="g_monitor"
-            android:pivotX="480"
-            android:pivotY="-540"
-            android:translateY="-75"
-            android:scaleX="0.90">
+            android:name="g_screen"
+            android:pivotX="500"
+            android:pivotY="-480"
+            android:translateY="-140"
+            android:scaleX="1.06"
+            android:scaleY="0.84">
             <path
                 android:name="p_monitor"
                 android:fillColor="#FF000000"
                 android:fillAlpha="0"
                 android:pathData="M200 -280q-33 0-56.5-23.5T120-360v-360q0-33 23.5-56.5T200-800h560q33 0 56.5 23.5T840-720H620q-58 0-99 41t-41 99v260q0 17-11.5 28.5T440-280H200Z" />
-        </group>
-        <group
-            android:name="g_phone"
-            android:pivotX="720"
-            android:pivotY="-400"
-            android:translateX="120"
-            android:rotation="11"
-            android:scaleX="0.68"
-            android:scaleY="0.68">
             <path
                 android:name="p_phone"
                 android:fillColor="#FF000000"
                 android:fillAlpha="0"
-                android:pathData="M620 -160q-25 0-42.5-17.5T560-220v-360q0-25 17.5-42.5T620-640h200q25 0 42.5 17.5T880-580v360q0 25-17.5 42.5T820-160H620Z" />
-        </group>
-        <group
-            android:name="g_camera"
-            android:pivotX="720"
-            android:pivotY="-490"
-            android:scaleX="0.08"
-            android:scaleY="0.08">
-            <path
-                android:name="p_camera"
-                android:fillColor="#FF000000"
-                android:fillAlpha="0"
-                android:pathData="M720 -460q13 0 21.5-9t8.5-21q0-13-8.5-21.5T720-520q-12 0-21 8.5t-9 21.5q0 12 9 21t21 9Z" />
+                android:pathData="M620 -160q-25 0-42.5-17.5T560-220v-360q0-25 17.5-42.5T620-640h200q25 0 42.5 17.5T880-580v360q0 25-17.5 42.5T820-160H620ZM720 -460q13 0 21.5-9t8.5-21q0-13-8.5-21.5T720-520q-12 0-21 8.5t-9 21.5q0 12 9 21t21 9Z" />
         </group>
     </group>
 </vector>
