@@ -79,6 +79,7 @@ import dev.sohan.linkpilot.ui.components.LoadingBlock
 import dev.sohan.linkpilot.ui.components.PillTone
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
 import dev.sohan.linkpilot.ui.components.SectionCard
+import dev.sohan.linkpilot.ui.components.SectionHeader
 import dev.sohan.linkpilot.ui.components.StatusPill
 import dev.sohan.linkpilot.ui.components.TextFieldDialog
 import dev.sohan.linkpilot.ui.formatSpeed
@@ -540,17 +541,6 @@ fun DevicesScreen(ui: RouterUiState, vm: RouterViewModel) {
             onDismiss = { blockTarget = null },
         )
     }
-}
-
-@Composable
-private fun SectionHeader(text: String) {
-    Text(
-        text,
-        style = MaterialTheme.typography.titleMediumEmphasized,
-        modifier = Modifier
-            .padding(start = 4.dp, top = 4.dp)
-            .semantics { heading() },
-    )
 }
 
 /** Groups rows inside the sheet, which is already a surface; a second card would be invisible. */

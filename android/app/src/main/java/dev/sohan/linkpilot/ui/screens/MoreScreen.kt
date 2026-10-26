@@ -34,8 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -48,6 +46,7 @@ import dev.sohan.linkpilot.ui.components.ConfirmDialog
 import dev.sohan.linkpilot.ui.components.EmptyState
 import dev.sohan.linkpilot.ui.components.ScreenScaffold
 import dev.sohan.linkpilot.ui.components.SectionCard
+import dev.sohan.linkpilot.ui.components.SectionHeader
 import dev.sohan.linkpilot.ui.components.SegmentedField
 import dev.sohan.linkpilot.ui.components.SettingSwitch
 import dev.sohan.linkpilot.vm.RouterUiState
@@ -286,15 +285,4 @@ private fun EntryRow(entry: MoreEntry, modifier: Modifier = Modifier, onClick: (
             )
         }
     }
-}
-
-@Composable
-private fun SectionHeader(text: String) {
-    Text(
-        text,
-        style = MaterialTheme.typography.titleMediumEmphasized,
-        modifier = Modifier
-            .padding(start = 4.dp, top = 4.dp)
-            .semantics { heading() },
-    )
 }

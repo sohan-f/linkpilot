@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -63,6 +65,9 @@ import androidx.annotation.DrawableRes
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import dev.sohan.linkpilot.R
 import dev.sohan.linkpilot.data.AuditEntry
 import dev.sohan.linkpilot.data.Risk
+import dev.sohan.linkpilot.ui.formatTime
 import kotlinx.coroutines.launch
 
 /** The shell's snackbar, shared so copy feedback uses Material feedback instead of a platform Toast. */
@@ -160,7 +166,11 @@ fun SectionCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
                         if (title != null) {
-                            Text(title, style = MaterialTheme.typography.titleMediumEmphasized)
+                            Text(
+                                title,
+                                style = MaterialTheme.typography.titleMediumEmphasized,
+                                modifier = Modifier.semantics { heading() },
+                            )
                         }
                         if (subtitle != null) {
                             Text(
@@ -179,6 +189,17 @@ fun SectionCard(
 }
 
 @Composable
+fun SectionHeader(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text,
+        style = MaterialTheme.typography.titleMediumEmphasized,
+        modifier = modifier
+            .padding(start = 4.dp, top = 4.dp)
+            .semantics { heading() },
+    )
+}
+
+@Composable
 fun InfoRow(
     label: String,
     value: String,
@@ -192,6 +213,7 @@ fun InfoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .semantics(mergeDescendants = true) {}
             .then(
                 if (canCopy) {
                     Modifier.clickable(onClickLabel = "Copy $label") {
@@ -359,6 +381,54 @@ fun auditBadge(entry: AuditEntry): AuditBadge {
         }
     }
     return AuditBadge(label, color, tone, icon)
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun AuditRow(entry: AuditEntry, modifier: Modifier = Modifier) {
+    val badge = auditBadge(entry)
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painterResource(badge.icon),
+                contentDescription = null,
+                tint = badge.color,
+            )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    entry.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    entry.detail,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    itemVerticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        formatTime(entry.at),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    StatusPill(badge.label, badge.tone)
+                }
+            }
+        }
+    }
 }
 
 /** A bulleted statement; the dot is decorative and kept out of the accessibility tree. */
@@ -562,7 +632,7 @@ fun MetricTile(
     modifier: Modifier = Modifier,
 ) {
     Surface(
-        modifier = modifier,
+        modifier = modifier.clearAndSetSemantics { contentDescription = "$label: $value" },
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
     ) {
@@ -606,7 +676,7 @@ fun QuickAction(
         Column(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
             Icon(painterResource(icon), contentDescription = null, tint = contentColor)
             Text(

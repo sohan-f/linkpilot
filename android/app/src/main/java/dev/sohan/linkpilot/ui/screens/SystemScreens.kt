@@ -41,11 +41,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.sohan.linkpilot.R
-import dev.sohan.linkpilot.data.AuditEntry
 import dev.sohan.linkpilot.data.Capabilities
 import dev.sohan.linkpilot.data.Operation
 import dev.sohan.linkpilot.data.Risk
 import dev.sohan.linkpilot.data.normalizeBase
+import dev.sohan.linkpilot.ui.components.AuditRow
 import dev.sohan.linkpilot.ui.components.Bullet
 import dev.sohan.linkpilot.ui.components.ConfirmDialog
 import dev.sohan.linkpilot.ui.components.EmptyState
@@ -56,8 +56,6 @@ import dev.sohan.linkpilot.ui.components.ScreenScaffold
 import dev.sohan.linkpilot.ui.components.SectionCard
 import dev.sohan.linkpilot.ui.components.StatusPill
 import dev.sohan.linkpilot.ui.components.TextFieldDialog
-import dev.sohan.linkpilot.ui.components.auditBadge
-import dev.sohan.linkpilot.ui.formatTime
 import dev.sohan.linkpilot.vm.RouterUiState
 import dev.sohan.linkpilot.vm.RouterViewModel
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -483,7 +481,7 @@ fun AuditScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
                 item { EmptyState("Nothing yet", "Changes you apply will be listed here.", R.drawable.ic_history) }
             }
 
-            items(entries, key = { it.id }) { entry -> AuditCard(entry) }
+            items(entries, key = { it.id }) { entry -> AuditRow(entry) }
             item { Spacer(Modifier.height(8.dp)) }
         }
     }
@@ -500,42 +498,5 @@ fun AuditScreen(ui: RouterUiState, vm: RouterViewModel, onBack: () -> Unit) {
             },
             onDismiss = { confirmClear = false },
         )
-    }
-}
-
-@Composable
-private fun AuditCard(entry: AuditEntry) {
-    val badge = auditBadge(entry)
-
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
-        Row(
-            modifier = Modifier.padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                painterResource(badge.icon),
-                contentDescription = null,
-                tint = badge.color,
-            )
-            Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
-                Text(entry.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(
-                    entry.detail,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    formatTime(entry.at),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            StatusPill(badge.label, badge.tone)
-        }
     }
 }
