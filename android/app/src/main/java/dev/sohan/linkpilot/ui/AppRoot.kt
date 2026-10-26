@@ -8,10 +8,20 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -51,7 +61,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -164,7 +173,6 @@ private data class Tab(
     val route: Route,
     val label: String,
     @DrawableRes val icon: Int,
-    @DrawableRes val iconSelected: Int,
 )
 
 @Composable
@@ -220,11 +228,11 @@ private fun MainShell(
 
     val tabs = remember {
         listOf(
-            Tab(Route.Home, "Home", R.drawable.ic_home, R.drawable.ic_home_filled),
-            Tab(Route.Devices, "Devices", R.drawable.ic_devices, R.drawable.ic_devices_filled),
-            Tab(Route.Wifi, "Wi-Fi", R.drawable.ic_wifi, R.drawable.ic_wifi_filled),
-            Tab(Route.Monitor, "Monitor", R.drawable.ic_insights, R.drawable.ic_insights_filled),
-            Tab(Route.More, "More", R.drawable.ic_more_horiz, R.drawable.ic_more_horiz_filled),
+            Tab(Route.Home, "Home", R.drawable.ic_home_animated),
+            Tab(Route.Devices, "Devices", R.drawable.ic_devices_animated),
+            Tab(Route.Wifi, "Wi-Fi", R.drawable.ic_wifi_animated),
+            Tab(Route.Monitor, "Monitor", R.drawable.ic_insights_animated),
+            Tab(Route.More, "More", R.drawable.ic_more_horiz_animated),
         )
     }
 
@@ -543,21 +551,60 @@ private fun RouteLayer(
             ShortNavigationBar(modifier = Modifier.onSizeChanged { onBarHeight(it.height) }) {
                 tabs.forEach { tab ->
                     val selected = route == tab.route
+                    val interaction = remember { MutableInteractionSource() }
+                    var retaps by remember { mutableIntStateOf(0) }
                     ShortNavigationBarItem(
                         selected = selected,
-                        onClick = { nav.select(tab.route) },
-                        icon = {
-                            Icon(
-                                painterResource(if (selected) tab.iconSelected else tab.icon),
-                                contentDescription = null,
-                            )
+                        onClick = {
+                            // Selecting a new tab runs the assembly; only a re-tap needs the wobble.
+                            if (selected) retaps++
+                            nav.select(tab.route)
                         },
+                        interactionSource = interaction,
+                        icon = { AnimatedTabIcon(tab, selected, interaction, retaps) },
                         label = { Text(tab.label) },
                     )
                 }
             }
         }
     }
+}
+
+/**
+ * The animated-vector resource assembles the filled glyph from its parts when [selected] flips.
+ * A re-tap on the current tab has no AVD state change to replay, so it gets a jelly wobble.
+ */
+@Composable
+private fun AnimatedTabIcon(
+    tab: Tab,
+    selected: Boolean,
+    interactionSource: InteractionSource,
+    retaps: Int,
+) {
+    val image = AnimatedImageVector.animatedVectorResource(tab.icon)
+    val pressed by interactionSource.collectIsPressedAsState()
+    val press = animateFloatAsState(
+        targetValue = if (pressed) 0.90f else 1f,
+        animationSpec = spring(dampingRatio = 0.7f, stiffness = 2000f),
+        label = "tabPress",
+    )
+    val jelly = remember { Animatable(0f) }
+    LaunchedEffect(retaps) {
+        if (retaps == 0) return@LaunchedEffect
+        jelly.snapTo(0.14f)
+        jelly.animateTo(0f, spring(dampingRatio = 0.62f, stiffness = 800f))
+    }
+    Icon(
+        painter = rememberAnimatedVectorPainter(image, selected),
+        contentDescription = null,
+        modifier = Modifier.graphicsLayer {
+            val resting = press.value
+            val wobble = jelly.value
+            scaleX = resting * (1f + wobble)
+            scaleY = resting * (1f - wobble * 0.8f)
+            rotationZ = -wobble * 32f
+        },
+    )
 }
 
 /** Blocks taps on the destination until the gesture commits. */
@@ -583,10 +630,14 @@ private fun tabTransition(
     val to = tabs.indexOfFirst { it.route == target }
     if (from < 0 || to < 0) return EnterTransition.None togetherWith ExitTransition.None
     val direction = if (to > from) 1 else -1
-    // No overshoot: the two layers tile the width exactly, and a bounce would expose the surface.
+    // Keep the parallax restrained; a large slide makes peer tabs feel like separate routes.
     val spec = motion.defaultSpatialSpec<IntOffset>()
-    return slideInHorizontally(spec) { width -> direction * width } togetherWith
-        slideOutHorizontally(spec) { width -> -direction * width }
+    // A short parallax shift plus a soft crossfade reads as a page change without making
+    // adjacent tabs feel like separate full-screen routes.
+    return (slideInHorizontally(spec) { width -> direction * width / 4 } +
+        fadeIn(motion.defaultEffectsSpec())) togetherWith
+        (slideOutHorizontally(spec) { width -> -direction * width / 4 } +
+            fadeOut(motion.defaultEffectsSpec()))
 }
 
 /** Saveable state key for a destination. */

@@ -80,6 +80,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:$compose")
     implementation("androidx.compose.foundation:foundation:$compose")
     implementation("androidx.compose.animation:animation:$compose")
+    implementation("androidx.compose.animation:animation-graphics:$compose")
     implementation("androidx.compose.ui:ui-tooling-preview:$compose")
     implementation("androidx.compose.material3:material3:1.5.0-beta02")
 

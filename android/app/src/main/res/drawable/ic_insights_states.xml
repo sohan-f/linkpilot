@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material Symbols Rounded: insights (default + fill1), layered for ic_insights_animated.
+     The filled chart is rebuilt from its own geometry - an 83-unit centreline through the four
+     80-unit node discs - so the AVD can draw it stroke by stroke instead of cross-fading. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <group android:translateY="960">
+        <path
+            android:name="outline"
+            android:fillColor="#FF000000"
+            android:fillAlpha="1"
+            android:pathData="M120-160q-33 0-56.5-23.5T40-240q0-33 23.5-56.5T120-320h10.5q4.5 0 9.5 2l182-182q-2-5-2-9.5V-520q0-33 23.5-56.5T400-600q33 0 56.5 23.5T480-520q0 2-2 20l102 102q5-2 9.5-2h21q4.5 0 9.5 2l142-142q-2-5-2-9.5V-560q0-33 23.5-56.5T840-640q33 0 56.5 23.5T920-560q0 33-23.5 56.5T840-480h-10.5q-4.5 0-9.5-2L678-340q2 5 2 9.5v10.5q0 33-23.5 56.5T600-240q-33 0-56.5-23.5T520-320v-10.5q0-4.5 2-9.5L420-442q-5 2-9.5 2H400q-2 0-20-2L198-260q2 5 2 9.5v10.5q0 33-23.5 56.5T120-160Zm40-401-25-54-54-25 54-25 25-54 25 54 54 25-54 25-25 54Zm440-39-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Z" />
+        <path
+            android:name="trace"
+            android:fillAlpha="0"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="83"
+            android:strokeAlpha="1"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:trimPathStart="0"
+            android:trimPathEnd="0"
+            android:pathData="M120 -240L400 -520L600 -320L840 -560" />
+        <group
+            android:name="g_node1"
+            android:pivotX="120"
+            android:pivotY="-240"
+            android:translateY="26"
+            android:scaleX="0.18"
+            android:scaleY="0.18">
+            <path
+                android:name="p_node1"
+                android:fillColor="#FF000000"
+                android:fillAlpha="0"
+                android:pathData="M120 -160a80 80 0 0 0 0 -160a80 80 0 0 0 0 160Z" />
+        </group>
+        <group
+            android:name="g_node2"
+            android:pivotX="400"
+            android:pivotY="-520"
+            android:translateY="26"
+            android:scaleX="0.18"
+            android:scaleY="0.18">
+            <path
+                android:name="p_node2"
+                android:fillColor="#FF000000"
+                android:fillAlpha="0"
+                android:pathData="M400 -440a80 80 0 0 0 0 -160a80 80 0 0 0 0 160Z" />
+        </group>
+        <group
+            android:name="g_node3"
+            android:pivotX="600"
+            android:pivotY="-320"
+            android:translateY="26"
+            android:scaleX="0.18"
+            android:scaleY="0.18">
+            <path
+                android:name="p_node3"
+                android:fillColor="#FF000000"
+                android:fillAlpha="0"
+                android:pathData="M600 -240a80 80 0 0 0 0 -160a80 80 0 0 0 0 160Z" />
+        </group>
+        <group
+            android:name="g_node4"
+            android:pivotX="840"
+            android:pivotY="-560"
+            android:translateY="26"
+            android:scaleX="0.18"
+            android:scaleY="0.18">
+            <path
+                android:name="p_node4"
+                android:fillColor="#FF000000"
+                android:fillAlpha="0"
+                android:pathData="M840 -480a80 80 0 0 0 0 -160a80 80 0 0 0 0 160Z" />
+        </group>
+        <group
+            android:name="g_spark_small"
+            android:pivotX="160"
+            android:pivotY="-640"
+            android:rotation="150"
+            android:scaleX="0.10"
+            android:scaleY="0.10">
+            <path
+                android:name="p_spark_small"
+                android:fillColor="#FF000000"
+                android:fillAlpha="0"
+                android:pathData="M160 -561l-25-54-54-25 54-25 25-54 25 54 54 25-54 25-25 54Z" />
+        </group>
+        <group
+            android:name="g_spark_big"
+            android:pivotX="600"
+            android:pivotY="-720"
+            android:rotation="-180"
+            android:scaleX="0.10"
+            android:scaleY="0.10">
+            <path
+                android:name="p_spark_big"
+                android:fillColor="#FF000000"
+                android:fillAlpha="0"
+                android:pathData="M600 -600l-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Z" />
+        </group>
+    </group>
+</vector>
